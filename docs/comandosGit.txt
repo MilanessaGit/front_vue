@@ -1,0 +1,23 @@
+Instalar Git
+    https://git-scm.com/
+
+configurar:
+    git config --global user.name "Su nombre"
+    git config --global user.email "su@correo.com"
+
+Crear una cuenta  en (GITHUB, BITBUCKET, GITLAB)
+
+    Crear un repositorio
+-----------------------------------------------------
+Iniciar mi proyecto de VUE con GIT
+> git init
+
+referencia del repositorio local con el repositorio remoto        
+
+> git remote add origin https://github.com/MilanessaGit/front-aries-vue3.git
+-----------------------------------------------------
+(hacer esto en cada modificaion al codigo) ()
+
+> git add .
+> git commit -m "Actualizacion de Vue"
+> git push origin master
