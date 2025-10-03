@@ -2,10 +2,17 @@ import { http } from "./HttpAxios";
 
 export default {
     listar(params = ''){
-        console.log(params);
-        return http().get(`/admin/producto?page=1`);
+        console.log(params.lazyEvent);
+        
+        params = JSON.parse(params.lazyEvent);
+        console.log(params);    
+        
+        let page = params.page ? params.page+1 : 1;
+        let limit = params.rows ? params.rows : 5;
+        
+        return http().get(`/admin/producto?page=${page}&limit=${limit}`);
     },
-    guardar(datos){
+    guardar(datos){ 
         return http().post("/admin/producto", datos); 
     },
     mostrar(id){
