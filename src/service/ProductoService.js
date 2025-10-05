@@ -1,7 +1,7 @@
 import { http } from "./HttpAxios";
 
 export default {
-    listar(params = ''){
+    listar(params = {lazyEvent: "{}"} ){
         console.log(params.lazyEvent);
         
         params = JSON.parse(params.lazyEvent);

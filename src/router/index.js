@@ -48,7 +48,13 @@ const router = createRouter({
           name: 'Producto',
           component: () => import('@/views/admin/producto/Producto.vue'),
           meta: {requireAuth: true}
-}
+        },
+        {
+          path: 'venta/nueva',
+          name: 'NuevaVenta',
+          component: () => import('@/views/admin/venta/NuevaVenta.vue'),
+          meta: {requireAuth: true}
+        }
       ]
     }    
   ]
