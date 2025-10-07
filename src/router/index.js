@@ -22,7 +22,8 @@ const router = createRouter({
     {
       path: '/admin',
       component: AppLayout,
-      children: [
+      children: 
+      [
         {
           path: 'about',
           name: 'about',
@@ -42,11 +43,18 @@ const router = createRouter({
           path: 'categoria',
           name: 'Categoria',
           component: () => import('../views/admin/Categoria.vue'),
+          meta: {requireAuth: true}
         },
         {
           path: 'producto',
           name: 'Producto',
           component: () => import('@/views/admin/producto/Producto.vue'),
+          meta: {requireAuth: true}
+        },
+        {
+          path: 'lote',
+          name: 'Lote',
+          component: () => import('@/views/admin/lote/Lote.vue'),
           meta: {requireAuth: true}
         },
         {

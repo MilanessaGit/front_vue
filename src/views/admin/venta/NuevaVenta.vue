@@ -40,6 +40,7 @@
             
             </Card>
         </div>
+
         <div class="col-5">
             <div class="grid">
                 <div class="col-12">
@@ -47,8 +48,9 @@
                         <h5>CARRITO</h5>
                         <!--{{ carrito }}-->
                         <DataTable :value="carrito" responsiveLayout="scroll">
+                            <Column field="codigo_lote" header="COD LOT"></Column>
                             <Column field="nombre" header="NOMBRE"></Column>
-                            <Column field="precio_sugerido" header="PRECIO_S"></Column>
+                            <!--costo_unitario--><Column field="precio_sugerido" header="PRECIO_S"></Column>
                             <!--<Column field="cantidad" header="CANT"></Column>-->
                             <Column field="accion" header="ACCION"></Column>   
                         </DataTable>

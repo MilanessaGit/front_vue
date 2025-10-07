@@ -34,11 +34,12 @@ const model = ref([
         label: 'Gestión Productos',
         items: [
             { label: 'Categorias', icon: 'pi pi-fw pi-id-card', to: '/admin/categoria' },
-            { label: 'Productos', icon: 'pi pi-fw pi-table', to: '/admin/producto' }
+            { label: 'Productos', icon: 'pi pi-fw pi-table', to: '/admin/producto' },
+            { label: 'Lotes', icon: 'pi pi-fw pi-tags', to: '/admin/lote' }
         ]
     },
     {
-        label: 'Pedidos',
+        label: 'Ventas',
         items: [
             { label: 'Nueva Venta', icon: 'pi pi-fw pi-eye', to: '/admin/venta/nueva', badge: 'NUEVO' },
             { label: 'Lista Ventas', icon: 'pi pi-fw pi-globe', to: '/admin/venta' },
