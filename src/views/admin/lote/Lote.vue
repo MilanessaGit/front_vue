@@ -11,9 +11,10 @@
                 <label for="cant">Cantidad</label>
                 <InputNumber id="cant" v-model="lot.cantidad" integeronly></InputNumber>
         </div>
+        
         <div class="field">
-            <label for="cod">prod</label>
-            <InputText type="text" id="cod" v-model="lot.producto_id"  />
+            <label for="nomp">ID Prod</label>
+            <InputText type="text" id="nomp" v-model="lot.producto_id"  />
         </div>
         <div class="field">
             <label>Producto</label>
@@ -69,6 +70,7 @@
         {{ formatCurrency(slotProps.data.costo_unitario) }}
       </template>
     </Column>
+    <Column field="producto.codigo_producto" header="Codigo Prod"></Column>
     <Column field="producto.nombre" header="Producto"></Column>
     
     <Column field="estado" header="Estado"> 

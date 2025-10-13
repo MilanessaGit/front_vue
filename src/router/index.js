@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import Login from '../views/auth/Login.vue'
 import AppLayout from '@/layout/AppLayout.vue';
+//import ListaVenta from '@/views/admin/venta/ListaVenta.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -61,6 +62,12 @@ const router = createRouter({
           path: 'venta/nueva',
           name: 'NuevaVenta',
           component: () => import('@/views/admin/venta/NuevaVenta.vue'),
+          meta: {requireAuth: true}
+        },
+        {
+          path: 'venta',
+          name: 'ListaVenta',
+          component: () => import('@/views/admin/venta/ListaVenta.vue'),
           meta: {requireAuth: true}
         }
       ]

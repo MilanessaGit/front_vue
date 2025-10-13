@@ -24,6 +24,7 @@
                         <Column field="codigo_producto" header="COD"></Column>
                         <Column field="nombre" header="NOMBRE"></Column>
                         <Column field="precio_sugerido" header="PRECIO_S"></Column>
+                        <Column field="categoria.nombre" header="CAT n"></Column>
                         <!--<Column field="stock" header="CANT"></Column>-->
                         <Column field="accion" header="GESTION">
                             <template #body="slotProps">
@@ -49,9 +50,12 @@
                         <!--{{ carrito }}-->
                         <DataTable :value="carrito" responsiveLayout="scroll">
                             <Column field="codigo_lote" header="COD LOT"></Column>
+                            <Column field="codigo_producto" header="COD PROD"></Column>
                             <Column field="nombre" header="NOMBRE"></Column>
                             <!--costo_unitario--><Column field="precio_sugerido" header="PRECIO_S"></Column>
+                            <Column field="empleado_id" header="EMPLEADO ID"></Column>
                             <!--<Column field="cantidad" header="CANT"></Column>-->
+                            
                             <Column field="accion" header="ACCION"></Column>   
                         </DataTable>
 
@@ -78,8 +82,8 @@
 
                 <div class="col-12">
                     <div class="card">
-                        <h5>GUARDAR VENTA</h5>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.</p>
+                        
+                        <Button label="Guardar" icon="pi pi-check" class="p-button-text" @click="guardarVenta"></Button>
                     </div>
                 </div>  
 
@@ -134,6 +138,7 @@
 import { onMounted, ref } from 'vue';
 import productoService from '@/service/ProductoService';
 import clienteService from '@/service/ClienteService';
+import ventaService from '@/service/VentaService';
 import Column from 'primevue/column';
     const products = ref([]);
     const buscar = ref("");
@@ -161,10 +166,12 @@ import Column from 'primevue/column';
 
         let p = {
             id: id,
+            codigo_lote: 1, // ** Revisar 
             codigo_producto: codigo_producto,
             nombre: nombre,
             precio_sugerido: precio_sugerido,
-            cantidad: 1 // ** Revisar este campo cm referencia xq no existe en Producto
+            cantidad: 1, // ** Revisar este campo cm referencia xq no existe en Producto
+            empleado_id: 1 // ** Revisar
         }
         carrito.value.push(p);
 
@@ -181,8 +188,17 @@ import Column from 'primevue/column';
         //llamar al servicio cliente
         const { data } = await clienteService.guardar(cliente.value);
         cliente.value = data
+
         visible.value = false;
         //console.log('guardar clientes')
+    }
+
+    const guardarVenta = async () => {
+        const datos_ven = {
+            cliente_id: cliente.value,
+            lotes: carrito.value
+        } 
+        const {data} =await ventaService.guardar(datos_ven)
     }
 
 </script>
