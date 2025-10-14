@@ -9,6 +9,73 @@
                 </template>
             </Card>
         </div>
+        
+
+        <div class="col-7">
+            <Card>
+                <template #title> LOTES </template>
+                <template #content>
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-search" />
+                        <!--<InputText v-model="buscar" placeholder="Buscar"
+                            @keypress.enter="buscarProductos"/>  --> 
+                            <!-- busca es variable y buscarProductos funcion-->
+                    </span> 
+                    <DataTable :value="lots" responsiveLayout="scroll">
+                        <Column field="id" header="ID"></Column>
+                        <Column field="codigo_lote" header="COD LOTE"></Column>
+                        <Column field="cantidad" header="CANTIDAD"></Column>
+                        <!-- Hacer la resta de cantidad cuando se de click en el boton  +  -->
+                        <Column field="costo_unitario" header="COSTO_U"></Column>
+                        <Column field="producto.codigo_producto" header="PROD COD"></Column>
+
+                        <Column field="producto.nombre" header="PROD NOM"></Column>
+                        
+                        <!-- Analizar xq me trae todos los atributos de Productos excepto categoria_id -->
+                        <Column field="accion" header="GESTION">
+                            <template #body="slotProps">
+                                <Button
+                                    icon="pi pi-plus"
+                                    class="p-button-rounded p-button-success"
+                                    aria-label="Eliminar"
+                                    @click="addCarrito2(slotProps.data)"
+                                /> 
+                            </template>
+                        </Column>
+                    </DataTable>
+                </template>
+            
+            </Card>
+        </div>
+
+
+        <div class="col-5">
+            <div class="grid">
+                <div class="col-12">
+                    <div class="card">
+                        <h5>CARRITO 2</h5>
+                        <!--{{ carrito }}-->
+                        <DataTable :value="carrito2" responsiveLayout="scroll">
+                            <Column field="codigo_lote" header="COD LOT"></Column>
+                            <Column field="cantidad" header="CANT"></Column>
+                            <Column field="costo_unitario" header="COSTO_U"></Column>
+                            <Column field="codigo_producto" header="COD PROD"></Column>
+                            <Column field="nombre" header="NOMBRE PROD"></Column>
+                            
+                            <Column field="empleado_id" header="EMPLEADO ID"></Column>
+                            
+                            
+                            <Column field="accion" header="ACCION"></Column>   
+                        </DataTable>
+
+                    </div>
+                </div>
+                
+
+            </div>
+        </div> 
+
+        
         <div class="col-7">
             <Card>
                 <template #title> PRODUCTOS </template>
@@ -136,6 +203,7 @@
 
 <script setup>
 import { onMounted, ref } from 'vue';
+import loteService from '@/service/LoteService';
 import productoService from '@/service/ProductoService';
 import clienteService from '@/service/ClienteService';
 import ventaService from '@/service/VentaService';
@@ -143,15 +211,24 @@ import Column from 'primevue/column';
     const products = ref([]);
     const buscar = ref("");
     const carrito = ref([]);
+
     const buscar_clie = ref("");
     const cliente = ref({});
     const visible = ref(false);
+
+    const lots = ref([]);
+    const carrito2 = ref([]);
     
     
 
     onMounted(async () => {
-        const {data} = await productoService.listar();
-        products.value = data.data; 
+        // Para solo Productos
+        //const {data} = await productoService.listar();
+        //products.value = data.data; 
+
+        //Lotes con  prod_id
+        const {data} = await loteService.listar();
+        lots.value = data.data; 
     })
 
     const buscarProductos = async() => {
@@ -161,9 +238,26 @@ import Column from 'primevue/column';
         products.value = data.data;     
     }
 
+    const addCarrito2 = (lt) => {
+        const {id, codigo_lote, cantidad, costo_unitario, producto} = lt;
+        let l = {
+            id: id,
+            codigo_lote: codigo_lote,  
+            cantidad: cantidad,            
+            costo_unitario: costo_unitario,
+            codigo_producto: producto.codigo_producto,
+            nombre : producto.nombre,
+
+            //codigo_producto: lt.producto.codigo_producto, // REFERENCIA ** Revisar
+
+             // ** Revisar este campo cm referencia xq no existe en LOTE
+            empleado_id: 1 // ** Revisar
+        }
+        carrito2.value.push(l);
+    }
+
     const addCarrito = (prod) => {
         const {id, codigo_producto, nombre, precio_sugerido} = prod;
-
         let p = {
             id: id,
             codigo_lote: 1, // ** Revisar 
@@ -174,7 +268,6 @@ import Column from 'primevue/column';
             empleado_id: 1 // ** Revisar
         }
         carrito.value.push(p);
-
     }
 
     const buscarClientes = async() => {
@@ -196,7 +289,7 @@ import Column from 'primevue/column';
     const guardarVenta = async () => {
         const datos_ven = {
             cliente_id: cliente.value,
-            lotes: carrito.value
+            lotes: carrito2.value //carrito.value para productos
         } 
         const {data} =await ventaService.guardar(datos_ven)
     }
