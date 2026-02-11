@@ -3,7 +3,7 @@
 <Button label="Nuevo producto" icon="pi pi-external-link" @click="abrirDialogProducto" />
 
 <Dialog v-model:visible="dialogNuevoProducto" modal header="Nuevo Producto" :style="{ width: '50vw' }" class="p-fluid">
-    {{ product }}
+        <!--{{ product }}-->
     <div class="field">
         <label for="cod">Ingrese Codigo</label>
         <InputText type="text" id="cod" v-model="product.codigo_producto" required autofocus  />
@@ -44,7 +44,7 @@
     </template>
 
 </Dialog>
-{{ products }}
+    <!--{{ products }}-->
 <!--Tabla Productos -->
   <DataTable ref="dt" :value="products" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 50rem"
               lazy :totalRecords="totalRecords" :loading="loading" @page="onPage($event)">

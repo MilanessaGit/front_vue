@@ -2,7 +2,7 @@
     <Button label="Nuevo Lote" icon="pi pi-external-link" @click="abrirDialogLote" />
 
     <Dialog v-model:visible="dialogNuevoLote" modal header="Nuevo Lote" :style="{ width: '50vw' }" class="p-fluid">
-        {{ lot }}
+            <!--{{ lot }}-->
         <div class="field">
             <label for="cod">Ingrese Codigo</label>
             <InputText type="text" id="cod" v-model="lot.codigo_lote" required autofocus  />
@@ -49,7 +49,7 @@
     </Dialog>
 
 
-{{  lots }}
+    <!--{{  lots }}-->
 <!--Tabla Lotes -->
 <DataTable ref="dt" :value="lots" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 50rem"
               lazy :totalRecords="totalRecords" :loading="loading" @page="onPage($event)">
