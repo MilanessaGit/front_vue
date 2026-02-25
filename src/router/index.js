@@ -69,6 +69,12 @@ const router = createRouter({
           name: 'ListaVenta',
           component: () => import('@/views/admin/venta/ListaVenta.vue'),
           meta: {requireAuth: true}
+        },
+        {
+          path: 'recomendar',
+          name: 'Recomendar',
+          component: () => import('@/views/admin/recomendacionAI/recomendacion.vue'),
+          meta: {requireAuth: true}
         }
       ]
     }    

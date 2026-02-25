@@ -1,5 +1,21 @@
 <template>
 
+
+
+<div v-if="cargando">Buscando recomendaciones...</div>
+
+<div v-if="recomendaciones.length">
+  <h3>Productos recomendados</h3>
+
+  <div v-for="p in recomendaciones" :key="p.id">
+    Producto ID: {{ p.id }} |
+    Categoría: {{ p.categoria_id }} |
+    Stock: {{ p.stock_total }}
+  </div>
+</div>
+
+
+
 <Button label="Nuevo producto" icon="pi pi-external-link" @click="abrirDialogProducto" />
 
 <Dialog v-model:visible="dialogNuevoProducto" modal header="Nuevo Producto" :style="{ width: '50vw' }" class="p-fluid">
@@ -94,6 +110,9 @@
 
     <Column field="acciones" header="Accion">
       <template #body="slotProps">        
+
+          <button @click="obtenerRecomendaciones(slotProps.data.id)"> Ver productos similares 🤖</button>
+
           <Button icon="pi pi-pencil" class="p-button-rounded p-button-warning" rounded  @click="editarProducto(slotProps.data)" />
           <Button icon="pi pi-times" class="p-button-rounded p-button-danger" aria-label="Eliminar" @click="eliminarProducto(slotProps.data.id)" />
       </template>
@@ -119,7 +138,7 @@
 import { ref } from "vue";
 import productoService from "@/service/ProductoService";
 import categoriaService from "@/service/CategoriaService";
-
+import axios from 'axios'
 
 const products = ref([]);
 const dialogNuevoProducto = ref(false)
@@ -229,4 +248,24 @@ const eliminarProducto = async (id) => {
 const formatCurrency = (value) => {
     return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
 };
+
+
+//
+const recomendaciones = ref([])
+const cargando = ref(false)
+
+const obtenerRecomendaciones = async (productoId) => {
+  cargando.value = true
+
+  try {
+    const res = await axios.get(
+      `http://localhost:8000/api/recomendar/${productoId}`
+    )
+    recomendaciones.value = res.data
+  } catch (error) {
+    console.error(error)
+  }
+
+  cargando.value = false
+}
 </script>
