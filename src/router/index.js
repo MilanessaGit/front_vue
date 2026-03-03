@@ -71,9 +71,21 @@ const router = createRouter({
           meta: {requireAuth: true}
         },
         {
+          path: 'dashboard',
+          name: 'Dashboard',
+          component: () => import('@/views/Dash/DashboardView.vue'),
+          meta: {requireAuth: true}
+        },
+        {
           path: 'recomendar',
           name: 'Recomendar',
           component: () => import('@/views/admin/recomendacionAI/recomendacion.vue'),
+          meta: {requireAuth: true}
+        },
+        {
+          path: 'prediccion',
+          name: 'Prediccion',
+          component: () => import('@/views/prediccionD/PrediccionDemanda.vue'),
           meta: {requireAuth: true}
         }
       ]

@@ -15,7 +15,6 @@
 </div>
 
 
-
 <Button label="Nuevo producto" icon="pi pi-external-link" @click="abrirDialogProducto" />
 
 <Dialog v-model:visible="dialogNuevoProducto" modal header="Nuevo Producto" :style="{ width: '50vw' }" class="p-fluid">
@@ -268,4 +267,6 @@ const obtenerRecomendaciones = async (productoId) => {
 
   cargando.value = false
 }
+
+
 </script>

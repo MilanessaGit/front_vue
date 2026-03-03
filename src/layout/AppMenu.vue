@@ -7,7 +7,7 @@ const model = ref([
     {
         label: 'ADMINISTRADOR',
         items: [
-            { label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' },
+            { label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/admin/dashboard' },
             { label: 'Perfil', icon: 'pi pi-fw pi-user', to: '/admin/about' }
            
            /* { label: 'Categorias', icon: 'pi pi-fw pi-id-card', to: '/uikit/formlayout' },
