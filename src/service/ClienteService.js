@@ -1,8 +1,16 @@
 import { http } from "./HttpAxios";
 
 export default {
-    listar(){    
-        return http().get(`/admin/cliente`);
+    listar(params = {lazyEvent: "{}"} ){
+            console.log(params.lazyEvent);
+            
+            params = JSON.parse(params.lazyEvent);
+            console.log(params);    
+            
+            let page = params.page ? params.page+1 : 1;
+            let limit = params.rows ? params.rows : 5;
+            
+            return http().get(`/admin/cliente?page=${page}&limit=${limit}`);
     },
     guardar(datos){ 
         return http().post("/admin/cliente", datos); 
@@ -18,8 +26,8 @@ export default {
         return http().delete(`/admin/cliente/${id}`);
     },
     
-    buscar(q=''){
-        return http().get(`/admin/cliente?q=${q}&limit=5`); //limite de 5 productos
+    filtrar(q=''){
+        return http().get(`/admin/cliente?q=${q}&limit=5`); //limite de 5 clientes
     }
      
 }

@@ -71,6 +71,63 @@ const router = createRouter({
           meta: {requireAuth: true}
         },
         {
+          path: 'cliente',
+          name: 'Cliente',
+          component: () => import('@/views/admin/cliente/Cliente.vue'),
+          meta: {requireAuth: true}
+        },
+        
+        {
+          path: 'proveedor',
+          name: 'Proveedor',
+          component: () => import('@/views/admin/proveedor/Proveedor.vue'),
+          meta: {requireAuth: true}
+        },
+        {
+          path: 'entrada/nueva',
+          name: 'NuevaEntrada',
+          component: () => import('@/views/admin/entrada/NuevaEntrada.vue'),
+          meta: {requireAuth: true}
+        },
+        {
+          path: 'entrada',
+          name: 'Entrada',
+          component: () => import('@/views/admin/entrada/ListaEntrada.vue'),
+          meta: {requireAuth: true}
+        },
+
+        {
+          path: 'empleado',
+          name: 'Empleado',
+          component: () => import('@/views/admin/empleado/Empleado.vue'),
+          meta: {requireAuth: true}
+        },
+        {
+          path: 'salida/nueva',
+          name: 'NuevaSalida',
+          component: () => import('@/views/admin/salida/NuevaSalida.vue'),
+          meta: {requireAuth: true}
+        },
+        {
+          path: 'salida',
+          name: 'Salida',
+          component: () => import('@/views/admin/salida/ListaSalida.vue'),
+          meta: {requireAuth: true}
+        },
+
+        {
+          path: 'almacen/nueva',
+          name: 'NuevoAlmacen',
+          component: () => import('@/views/admin/almacen/NuevoAlmacen.vue'),
+          meta: {requireAuth: true}
+        },
+        {
+          path: 'almacen',
+          name: 'Almacen',
+          component: () => import('@/views/admin/almacen/ListaAlmacen.vue'),
+          meta: {requireAuth: true}
+        },
+        {
           path: 'dashboard',
           name: 'Dashboard',
           component: () => import('@/views/Dash/DashboardView.vue'),

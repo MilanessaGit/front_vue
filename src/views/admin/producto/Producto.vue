@@ -1,7 +1,5 @@
 <template>
 
-
-
 <div v-if="cargando">Buscando recomendaciones...</div>
 
 <div v-if="recomendaciones.length">
@@ -150,6 +148,7 @@ const loading = ref(false)
 const lazyParams = ref({});
 
 const abrirDialogProducto = () => {
+    product.value = {}
     dialogNuevoProducto.value = true
 }
 

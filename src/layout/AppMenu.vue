@@ -8,7 +8,8 @@ const model = ref([
         label: 'ADMINISTRADOR',
         items: [
             { label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/admin/dashboard' },
-            { label: 'Perfil', icon: 'pi pi-fw pi-user', to: '/admin/about' }
+            { label: 'Perfil', icon: 'pi pi-fw pi-user', to: '/admin/about' },
+            { label: 'Empleados', icon: 'pi pi-fw pi-id-card', to: '/admin/empleado' }
            
            /* { label: 'Categorias', icon: 'pi pi-fw pi-id-card', to: '/uikit/formlayout' },
             { label: 'Productos', icon: 'pi pi-fw pi-check-square', to: '/uikit/input' },
@@ -43,9 +44,33 @@ const model = ref([
         items: [
             { label: 'Nueva Venta', icon: 'pi pi-fw pi-eye', to: '/admin/venta/nueva', badge: 'NUEVO' },
             { label: 'Lista Ventas', icon: 'pi pi-fw pi-globe', to: '/admin/venta' },
-            { label: 'Clientes', icon: 'pi pi-fw pi-globe', url: 'https://www.primefaces.org/primeblocks-vue', target: '_blank' }
+            { label: 'Clientes', icon: 'pi pi-fw pi-user', to: '/admin/cliente' }
         ]
     },
+    {
+        label: 'Entradas',
+        items: [
+            { label: 'Nueva Entrada', icon: 'pi pi-fw pi-eye', to: '/admin/entrada/nueva', badge: 'NUEVO' },
+            { label: 'Lista Entradas', icon: 'pi pi-fw pi-globe', to: '/admin/entrada' },
+            { label: 'Proveedores', icon: 'pi pi-fw pi-user', to: '/admin/proveedor' }
+        ]
+    },
+
+    {
+        label: 'Salidas',
+        items: [
+            { label: 'Nueva Salida', icon: 'pi pi-fw pi-eye', to: '/admin/salida/nueva', badge: 'NUEVO' },
+            { label: 'Lista Salidas', icon: 'pi pi-fw pi-globe', to: '/admin/salida' } 
+        ]
+    },
+    {
+        label: 'Gestion Almacen',
+        items: [
+            { label: 'Nueva Almacen', icon: 'pi pi-fw pi-eye', to: '/admin/almacen/nueva', badge: 'NUEVO' },
+            { label: 'Lista Almacenes', icon: 'pi pi-fw pi-globe', to: '/admin/almacen' } 
+        ]
+    },
+    
     
 
 ]);
