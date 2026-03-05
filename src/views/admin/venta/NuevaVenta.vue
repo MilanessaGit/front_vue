@@ -3,7 +3,7 @@
 
         <div class="col-12">
             <Card>
-                <template #title> DATOS DE PEDIDO </template>
+                <template #title> DATOS DE VENTA </template>
                 <template #content>
                 <p></p>
                 </template>
@@ -82,7 +82,7 @@
                             /> <!-- busca es variable y buscarProductos funcion-->
                             </span> 
                                 <Button label="Nuevo" icon="pi pi-external-link" @click="visible = true" />
-                                {{ cliente?.id?'':'CLiente No encotrado' }}
+                                {{ cliente?.id?'':'CLIENTE NO ENCONTRADO' }}
 
                                 <h4>CLIENTE: {{ cliente.nombre }}  {{ cliente.apellido }}</h4>
                                 
@@ -232,6 +232,7 @@ import { onMounted, ref } from 'vue';
 import loteService from '@/service/LoteService';
 import productoService from '@/service/ProductoService';
 import clienteService from '@/service/ClienteService';
+
 //import empleadoService from '@/service/EmpleadoService';//rev no existe en el proyecto, revisar
 import ventaService from '@/service/VentaService';
 import Column from 'primevue/column';

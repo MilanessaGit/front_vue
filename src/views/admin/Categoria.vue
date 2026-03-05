@@ -38,7 +38,7 @@
       <Column field="descripcion" header="Descripcion"></Column>
       <Column field="accion" header="Acciones">
         <template #body="slotProps">
-          <Button @click="editarCategoria(slotProps.data)" />
+          <Button icon="pi pi-pencil" class="p-button-rounded p-button-warning" rounded @click="editarCategoria(slotProps.data)" />
         </template>
       </Column>
     </DataTable>

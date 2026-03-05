@@ -59,7 +59,7 @@
       <div
         class="flex flex-wrap align-items-center justify-content-between gap-2"
       >
-        <span class="text-xl text-900 font-bold">Empleados</span>
+        <span class="text-xl text-900 font-bold">EMPLEADOS</span>
         <Button icon="pi pi-refresh" rounded raised />
       </div>
     </template>
@@ -74,7 +74,7 @@
     <Column field="telefono" header="Telefono"></Column>
     <Column field="direccion" header="Direccion"></Column>
     
-    <Column field="user_id" header="Usuario ID"></Column>
+    <Column field="user.email" header="Email"></Column>
     
     <!-- <Column field="estado" header="Estado"> 
       <template #body="slotProps">

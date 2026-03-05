@@ -26,7 +26,7 @@ export default {
         return http().delete(`/admin/cliente/${id}`);
     },
     
-    filtrar(q=''){
+    buscar(q=''){
         return http().get(`/admin/cliente?q=${q}&limit=5`); //limite de 5 clientes
     }
      
