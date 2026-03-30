@@ -1,8 +1,9 @@
 import { http } from "./HttpAxios";
+import { rutaRol } from "@/utils/rolRuta";
 
 export default {
     listar(){
-        return http().get("/admin/categoria");
+        return http().get(`${rutaRol()}/categoria`);
     },
     guardar(datos){
         return http().post("/admin/categoria", datos); 

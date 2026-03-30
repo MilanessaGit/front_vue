@@ -168,24 +168,14 @@
     </div>
 
 
-    <!--<div class="grid">
-        <div class="col-12">
-            <div class="card"><h5>hola</h5></div>
-        </div>
-        <div class="col-12">
-            <div class="card"><h5>hola2</h5></div>
-        </div>
-        <div class="col-12">
-            <div class="card"><h5>hola3</h5></div>
-        </div>
-    </div>-->
+    
 </template>
 
 <script setup>
 import { onMounted, ref } from 'vue';
 import loteService from '@/service/LoteService';
 import productoService from '@/service/ProductoService';
-import clienteService from '@/service/EmpleadoService';
+import empleadoService from '@/service/EmpleadoService';
 
 //import empleadoService from '@/service/EmpleadoService';//rev no existe en el proyecto, revisar
 
@@ -260,7 +250,8 @@ import Column from 'primevue/column';
 
     const guardarSalida = async () => {
         const datos_sal = {
-            cliente_id: cliente.value.id,
+            //cliente_id: cliente.value.id,
+            
             empleado_id, //rev xq es fijo mas no es dinamico, revisar**
             lotes: carrito2.value, //carrito.value para productos
             

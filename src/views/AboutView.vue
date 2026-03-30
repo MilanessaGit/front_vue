@@ -1,9 +1,12 @@
 <template>
   <ProgressBar mode="indeterminate" style="height: 6px" v-if="mis_datos == null"></ProgressBar>
   <div class="card" v-else>
+    
     <h1>Perfil</h1>
-    <h3>Nombre: {{ mis_datos.name }}</h3>
-    <h3>Correo: {{ mis_datos.email }}</h3>
+
+    <h3>Nombre: {{ mis_datos.user.name }}</h3>  <!-- .user.name -->
+    <h3>Correo: {{ mis_datos.user.email }}</h3>
+    <h3>Rol: {{ mis_datos.role.nombre }} </h3>
     <Button @click="salir">SALIR</Button>
   </div>
 </template>

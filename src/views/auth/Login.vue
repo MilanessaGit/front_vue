@@ -53,6 +53,9 @@ export default {
             localStorage.setItem("access_token", data.access_token) // En LocalStorage seteamos y guardamos la respuesta del servidor(data.access_token), con el nombre de "access_token"
             //,data.access_token : Es el token que genero Laravel y q nos envia cm respuesta de la funcion login-LARAVEL
             //alert("INGRESANDO..")
+            
+            localStorage.setItem("role", data.role) // Guardamos el rol del usuario en LocalStorage, con el nombre de "rol"
+
             router.push({name: 'about'}) // redireccionamos a dashboard
             
         }

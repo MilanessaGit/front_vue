@@ -25,7 +25,7 @@ export default {
     eliminar(id){
         return http().delete(`/admin/empleado/${id}`);
     },
-    filtrar(q=''){
+    buscar(q=''){
         return http().get(`/admin/empleado?q=${q}&limit=5`); //limite de 5 empleados
     }
      
