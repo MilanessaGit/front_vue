@@ -1,4 +1,5 @@
 import { http } from "./HttpAxios";
+import { rutaRol } from "@/utils/rolRuta";
 
 export default {
     listar(params = {lazyEvent: "{}"} ){
@@ -10,24 +11,24 @@ export default {
         let page = params.page ? params.page+1 : 1;
         let limit = params.rows ? params.rows : 5;
         
-        return http().get(`/admin/lote?page=${page}&limit=${limit}`);
+        return http().get(`${rutaRol()}/lote?page=${page}&limit=${limit}`);
     },
     guardar(datos){ 
-        return http().post("/admin/lote", datos); 
+        return http().post(`${rutaRol()}/lote`, datos); 
     },
     mostrar(id){
         // return http().get("/admin/usuario/"+id); //Informal
-        return http().get(`/admin/lote/${id}`);
+        return http().get(`${rutaRol()}/lote/${id}`);
     },
     modificar(id, datos){
-        return http().put(`/admin/lote/${id}`, datos);
+        return http().put(`${rutaRol()}/lote/${id}`, datos);
     },
     eliminar(id){
-        return http().delete(`/admin/lote/${id}`);
+        return http().delete(`${rutaRol()}/lote/${id}`);
     },
     
     filtrar(q=''){
-        return http().get(`/admin/lote?q=${q}&limit=5`); //limite de 5 productos
+        return http().get(`${rutaRol()}/lote?q=${q}&limit=5`); //limite de 5 productos
     }
      
 }

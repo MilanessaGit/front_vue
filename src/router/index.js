@@ -3,6 +3,8 @@ import HomeView from '../views/HomeView.vue'
 import Login from '../views/auth/Login.vue'
 import AppLayout from '@/layout/AppLayout.vue';
 //import ListaVenta from '@/views/admin/venta/ListaVenta.vue';
+import { rutaRol } from '@/utils/rolRuta';
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -43,7 +45,7 @@ const router = createRouter({
         {
           path: 'categoria',
           name: 'Categoria',
-          component: () => import('../views/admin/Categoria.vue'),
+          component: () => import(`../views/admin/Categoria.vue`),
           meta: {requireAuth: true}
         },
         {

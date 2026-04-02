@@ -1,5 +1,5 @@
 <template>
-    <Button label="Nuevo Lote" icon="pi pi-external-link" @click="abrirDialogLote" />
+    <Button v-if="esAdmin" label="Nuevo Lote" icon="pi pi-external-link" @click="abrirDialogLote" />
 
     <Dialog v-model:visible="dialogNuevoLote" modal header="Nuevo Lote" :style="{ width: '50vw' }" class="p-fluid">
             <!--{{ lot }}-->
@@ -79,10 +79,10 @@
       </template>
     </Column>
 
-    <Column field="acciones" header="Accion">
+    <Column v-if="esAdmin" field="acciones" header="Accion">
       <template #body="slotProps">        
-          <Button icon="pi pi-pencil" class="p-button-rounded p-button-warning" rounded  @click="editarLote(slotProps.data)" />
-          <Button icon="pi pi-times" class="p-button-rounded p-button-danger" aria-label="Eliminar" @click="eliminarLote(slotProps.data.id)" />
+          <Button v-if="esAdmin" icon="pi pi-pencil" class="p-button-rounded p-button-warning" rounded  @click="editarLote(slotProps.data)" />
+          <Button v-if="esAdmin" icon="pi pi-times" class="p-button-rounded p-button-danger" aria-label="Eliminar" @click="eliminarLote(slotProps.data.id)" />
       </template>
     </Column>
 
@@ -98,6 +98,9 @@ import { ref } from "vue";
 import productoService from "@/service/ProductoService";
 //import categoriaService from "@/service/CategoriaService";
 import loteService from "@/service/LoteService";
+
+const role = localStorage.getItem("role")
+const esAdmin = role === 'admin'
 
 const lots = ref([]);
 const dialogNuevoLote = ref(false) // Lote
@@ -174,8 +177,8 @@ listaProductos()// prod
 
 
 const guardarLote = async () => { // lote
-  console.log("guardar vvalue",lot.value)
-  console.log("guardar vvalue id",lot.value.id)
+  console.log("guardar value",lot.value)
+  console.log("guardar value id",lot.value.id)
   if(lot.value.id){
     await loteService.modificar(lot.value.id, lot.value);
   }else{

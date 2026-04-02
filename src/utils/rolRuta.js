@@ -5,7 +5,7 @@ export const rutaRol = () => {
     const rutas = {
         admin: "/admin",
         supervisor: "/supervisor",
-        usuario: "/vendedor"
+        vendedor: "/vendedor"
     }
 
     return rutas[rol] || "";

@@ -29,6 +29,7 @@ export default {
     const salir = async() => {
       await authService.logout();
       localStorage.removeItem("access_token");
+      localStorage.removeItem("role");
       router.push({name: 'Login'}) // router redirecciona a /login
     } 
 
