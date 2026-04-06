@@ -1,5 +1,5 @@
 <template>
-    <Button v-if="esAdmin" label="Nuevo Lote" icon="pi pi-external-link" @click="abrirDialogLote" />
+    <Button v-if="puedeCrear" label="Nuevo Lote" icon="pi pi-external-link" @click="abrirDialogLote" />
 
     <Dialog v-model:visible="dialogNuevoLote" modal header="Nuevo Lote" :style="{ width: '50vw' }" class="p-fluid">
             <!--{{ lot }}-->
@@ -79,10 +79,10 @@
       </template>
     </Column>
 
-    <Column v-if="esAdmin" field="acciones" header="Accion">
+    <Column v-if="puedeEditar || puedeEliminar" field="acciones" header="Accion">
       <template #body="slotProps">        
-          <Button v-if="esAdmin" icon="pi pi-pencil" class="p-button-rounded p-button-warning" rounded  @click="editarLote(slotProps.data)" />
-          <Button v-if="esAdmin" icon="pi pi-times" class="p-button-rounded p-button-danger" aria-label="Eliminar" @click="eliminarLote(slotProps.data.id)" />
+          <Button v-if="puedeEditar" icon="pi pi-pencil" class="p-button-rounded p-button-warning" rounded  @click="editarLote(slotProps.data)" />
+          <Button v-if="puedeEliminar" icon="pi pi-times" class="p-button-rounded p-button-danger" aria-label="Eliminar" @click="eliminarLote(slotProps.data.id)" />
       </template>
     </Column>
 
@@ -100,7 +100,10 @@ import productoService from "@/service/ProductoService";
 import loteService from "@/service/LoteService";
 
 const role = localStorage.getItem("role")
-const esAdmin = role === 'admin'
+const esAdmin = role === 'admin';
+const puedeCrear = role === 'admin' || role === 'supervisor'
+const puedeEditar = role === 'admin' || role === 'supervisor'
+const puedeEliminar = role === 'admin'
 
 const lots = ref([]);
 const dialogNuevoLote = ref(false) // Lote

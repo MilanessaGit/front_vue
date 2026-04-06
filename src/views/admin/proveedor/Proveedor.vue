@@ -1,6 +1,6 @@
 <template>
 
-<Button label="Nuevo Proveedor" icon="pi pi-external-link" @click="abrirDialogProveedor" />
+<Button v-if="puedeCrear" label="Nuevo Proveedor" icon="pi pi-external-link" @click="abrirDialogProveedor" />
 
 <Dialog v-model:visible="dialogNuevoProveedor" modal header="Nuevo Proveedor" :style="{ width: '50vw' }" class="p-fluid">
         <!--{{ product }}-->
@@ -74,7 +74,7 @@
       </template>
     </Column> -->
 
-    <Column field="acciones" header="Accion">
+    <Column v-if="puedeEditar || puedeEliminar" field="acciones" header="Accion">
       <template #body="slotProps">        
 
           <Button icon="pi pi-pencil" class="p-button-rounded p-button-warning" rounded  @click="editarProveedor(slotProps.data)" />
@@ -99,12 +99,16 @@ const proveedors = ref([]);
 const dialogNuevoProveedor = ref(false)
 const proveedor = ref({})
 
-
-
 const id_proveedor = ref(-1)
 const totalRecords = ref(0)
 const loading = ref(false)
 const lazyParams = ref({});
+
+const role = localStorage.getItem("role")
+const esAdmin = role === 'admin';
+const puedeCrear = role === 'admin' || role === 'supervisor'
+const puedeEditar = role === 'admin' 
+const puedeEliminar = role === 'admin'
 
 const abrirDialogProveedor = () => {
     proveedor.value = {}

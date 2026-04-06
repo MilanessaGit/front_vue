@@ -13,7 +13,7 @@
 </div>
 
 
-<Button label="Nuevo producto" icon="pi pi-external-link" @click="abrirDialogProducto" />
+<Button v-if="puedeCrear" label="Nuevo producto" icon="pi pi-external-link" @click="abrirDialogProducto" />
 
 <Dialog v-model:visible="dialogNuevoProducto" modal header="Nuevo Producto" :style="{ width: '50vw' }" class="p-fluid">
         <!--{{ product }}-->
@@ -110,8 +110,8 @@
 
           <button @click="obtenerRecomendaciones(slotProps.data.id)"> Ver productos similares 🤖</button>
 
-          <Button icon="pi pi-pencil" class="p-button-rounded p-button-warning" rounded  @click="editarProducto(slotProps.data)" />
-          <Button icon="pi pi-times" class="p-button-rounded p-button-danger" aria-label="Eliminar" @click="eliminarProducto(slotProps.data.id)" />
+          <Button v-if="puedeEditar" icon="pi pi-pencil" class="p-button-rounded p-button-warning" rounded  @click="editarProducto(slotProps.data)" />
+          <Button v-if="puedeEliminar" icon="pi pi-times" class="p-button-rounded p-button-danger" aria-label="Eliminar" @click="eliminarProducto(slotProps.data.id)" />
       </template>
     </Column>
 
@@ -146,6 +146,12 @@ const id_producto = ref(-1)
 const totalRecords = ref(0)
 const loading = ref(false)
 const lazyParams = ref({});
+
+const role = localStorage.getItem("role")
+const esAdmin = role === 'admin';
+const puedeCrear = role === 'admin' || role === 'supervisor'
+const puedeEditar = role === 'admin' 
+const puedeEliminar = role === 'admin'
 
 const abrirDialogProducto = () => {
     product.value = {}

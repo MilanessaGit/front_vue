@@ -3,6 +3,7 @@
     <h1>Categorias</h1>
 
     <Button
+      v-if="puedeCrear"
       label="Nueva Categoria"
       icon="pi pi-external-link"
       @click="visible = true"
@@ -36,9 +37,9 @@
       <Column field="id" header="Codigo"></Column>
       <Column field="nombre" header="Nombre Categoria"></Column>
       <Column field="descripcion" header="Descripcion"></Column>
-      <Column field="accion" header="Acciones">
+      <Column v-if="puedeEditar" field="accion" header="Acciones">
         <template #body="slotProps">
-          <Button icon="pi pi-pencil" class="p-button-rounded p-button-warning" rounded @click="editarCategoria(slotProps.data)" />
+          <Button v-if="puedeEditar" icon="pi pi-pencil" class="p-button-rounded p-button-warning" rounded @click="editarCategoria(slotProps.data)" />
         </template>
       </Column>
     </DataTable>
@@ -53,6 +54,12 @@ const categorias = ref([]);
 const visible = ref(false);
 const categoria = ref({ nombre: "", descripcion: "" });
 const loading = ref(true)
+
+const role = localStorage.getItem("role")
+const esAdmin = role === 'admin';
+const puedeCrear = role === 'admin'
+const puedeEditar = role === 'admin'
+const puedeEliminar = role === 'admin'
 
 onMounted(() => {
   getCategorias();

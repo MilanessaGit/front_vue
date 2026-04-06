@@ -62,7 +62,7 @@
       <template #body="slotProps">        
 
           <Button icon="pi pi-pencil" class="p-button-rounded p-button-warning" rounded  @click="editarCliente(slotProps.data)" />
-          <Button icon="pi pi-times" class="p-button-rounded p-button-danger" aria-label="Eliminar" @click="eliminarCliente(slotProps.data.id)" />
+          <Button v-if="puedeEliminar" icon="pi pi-times" class="p-button-rounded p-button-danger" aria-label="Eliminar" @click="eliminarCliente(slotProps.data.id)" />
       </template>
     </Column>
 
@@ -87,6 +87,12 @@ const id_cliente = ref(-1)
 const totalRecords = ref(0)
 const loading = ref(false)
 const lazyParams = ref({});
+
+const role = localStorage.getItem("role")
+const esAdmin = role === 'admin';
+const puedeCrear = role === 'admin' || role === 'supervisor'
+const puedeEditar = role === 'admin' || role === 'supervisor'
+const puedeEliminar = role === 'admin'
 
 const abrirDialogCliente = () => {
     cliente.value = {}

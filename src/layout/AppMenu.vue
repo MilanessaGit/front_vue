@@ -82,6 +82,36 @@ const menuSupervisor = [
             { label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/admin/dashboard' },
             { label: 'Perfil', icon: 'pi pi-fw pi-user', to: '/admin/about' }
         ]
+    },
+    {
+        label: 'Gestión Productos',
+        items: [
+            { label: 'Categorias', icon: 'pi pi-fw pi-id-card', to: '/admin/categoria' },
+            { label: 'Productos', icon: 'pi pi-fw pi-table', to: '/admin/producto' },
+            { label: 'Lotes', icon: 'pi pi-fw pi-tags', to: '/admin/lote' }
+        ]
+    },
+    {
+        label: 'Ventas',
+        items: [
+            { label: 'Nueva Venta', icon: 'pi pi-fw pi-eye', to: '/admin/venta/nueva', badge: 'NUEVO' },
+            { label: 'Lista Ventas', icon: 'pi pi-fw pi-globe', to: '/admin/venta' },
+            { label: 'Clientes', icon: 'pi pi-fw pi-user', to: '/admin/cliente' }
+        ]
+    },
+    {
+        label: 'Salidas',
+        items: [
+            { label: 'Nueva Salida', icon: 'pi pi-fw pi-eye', to: '/admin/salida/nueva', badge: 'NUEVO' },
+            { label: 'Lista Salidas', icon: 'pi pi-fw pi-globe', to: '/admin/salida' } 
+        ]
+    },
+    {
+        label: 'Gestion Almacen',
+        items: [
+            { label: 'Nueva Almacen', icon: 'pi pi-fw pi-eye', to: '/admin/almacen/nueva', badge: 'NUEVO' },
+            { label: 'Lista Almacenes', icon: 'pi pi-fw pi-globe', to: '/admin/almacen' } 
+        ]
     }
 ];
 
@@ -94,14 +124,18 @@ const menuVendedor = [
         ]
     },
     {
+        label: 'Gestión Productos',
+        items: [
+            { label: 'Categorias', icon: 'pi pi-fw pi-id-card', to: '/admin/categoria' },
+            { label: 'Productos', icon: 'pi pi-fw pi-table', to: '/admin/producto' },
+            { label: 'Lotes', icon: 'pi pi-fw pi-tags', to: '/admin/lote' }
+        ]
+    },
+    {
         label: 'Ventas',
         items: [
             { label: 'Nueva Venta', icon: 'pi pi-fw pi-eye', to: '/admin/venta/nueva', badge: 'NUEVO' },
             { label: 'Lista Ventas', icon: 'pi pi-fw pi-globe', to: '/admin/venta' },
-            { label: 'Categorias', icon: 'pi pi-fw pi-id-card', to: '/admin/categoria' },
-            { label: 'Productos', icon: 'pi pi-fw pi-table', to: '/admin/producto' },
-            { label: 'Lotes', icon: 'pi pi-fw pi-tags', to: '/admin/lote' },
-
             { label: 'Clientes', icon: 'pi pi-fw pi-user', to: '/admin/cliente' }
         ]
     }
