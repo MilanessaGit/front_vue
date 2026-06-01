@@ -248,8 +248,6 @@ import Column from 'primevue/column';
 
     const lots = ref([]);
     const carrito2 = ref([]);
-    
-    
 
     onMounted(async () => {
         // Para solo Productos
@@ -266,6 +264,16 @@ import Column from 'primevue/column';
         const {data} = await productoService.filtrar(buscar.value);
         console.log(data.data)
         products.value = data.data;     
+    }
+
+    const guardarVenta = async () => {
+        const datos_ven = {
+            cliente_id: cliente.value.id,
+            empleado_id, //rev xq es fijo mas no es dinamico, revisar**
+            lotes: carrito2.value, //carrito.value para productos
+            
+        } 
+        const {data} =await ventaService.guardar(datos_ven)
     }
 
     const addCarrito2 = (lt) => {
@@ -316,14 +324,6 @@ import Column from 'primevue/column';
         //console.log('guardar clientes')
     }
 
-    const guardarVenta = async () => {
-        const datos_ven = {
-            cliente_id: cliente.value.id,
-            empleado_id, //rev xq es fijo mas no es dinamico, revisar**
-            lotes: carrito2.value, //carrito.value para productos
-            
-        } 
-        const {data} =await ventaService.guardar(datos_ven)
-    }
+    
 
 </script>

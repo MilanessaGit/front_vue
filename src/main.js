@@ -7,6 +7,7 @@ import router from './router'
 
 
 import PrimeVue from 'primevue/config';
+
 import AutoComplete from 'primevue/autocomplete';
 import Accordion from 'primevue/accordion';
 import AccordionTab from 'primevue/accordiontab';
@@ -113,11 +114,21 @@ import '@/assets/styles.scss';
 
 const app = createApp(App)
 
+
 app.use(createPinia())
 app.use(router)
 
 /** Componentes de PrimeVue */
-app.use(PrimeVue, { ripple: true });
+app.use(PrimeVue, { 
+    //ripple: true });
+    zIndex: {
+        modal: 1100,
+        overlay: 1000,
+        menu: 1000,
+        tooltip: 1100
+    }
+});
+
 app.use(ToastService);
 app.use(DialogService);
 app.use(ConfirmationService);

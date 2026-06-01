@@ -3,10 +3,10 @@
 
     <Dialog v-model:visible="dialogNuevoLote" modal header="Nuevo Lote" :style="{ width: '50vw' }" class="p-fluid">
             <!--{{ lot }}-->
-        <div class="field">
+        <!-- <div class="field">
             <label for="cod">Ingrese Codigo</label>
             <InputText type="text" id="cod" v-model="lot.codigo_lote" required autofocus  />
-        </div>
+        </div> -->
         <div class="field col">
                 <label for="cant">Cantidad</label>
                 <InputNumber id="cant" v-model="lot.cantidad" integeronly></InputNumber>
