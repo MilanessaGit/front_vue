@@ -34,7 +34,7 @@
 
         <div class="col-12">
             <Card>
-                <template #title> Detalle de Productos</template>
+                <template #title> DETALLES DEL PRODUCTO</template>
                 <template #content>
                     <div class="card flex justify-content">
                         <p>PRODUCTO : </p> <br>
@@ -93,10 +93,10 @@
                     <DataTable :value="detalleEntrada" responsiveLayout="scroll">
                         <Column field="selectedProv" header="PROVEEDOR"></Column>
                         <Column field="fechaActual" header="FECHA"></Column>
-                        <Column field="selectedProd" header="PRODUCTO"></Column>
+                        <Column field="codigo_producto" header="PRODUCTO"></Column>
                         <!-- Hacer la resta de cantidad cuando se de click en el boton  +  -->
-                        <Column field="cant" header="CANTIDAD"></Column>
-                        <Column field="precio" header="PRECIO"></Column>
+                        <Column field="cantidad" header="CANTIDAD"></Column>
+                        <Column field="costo_unitario" header="PRECIO"></Column>
                         <!--<Column field="producto.codigo_producto" header="PROD COD"></Column>-->
 
                         
@@ -116,92 +116,7 @@
             </Card>
         </div>    
 
-        
-
-
-        
-        <!--<div class="col-7">
-            <Card>
-                <template #title> PRODUCTOS </template>
-                <template #content>
-                    <span class="p-input-icon-left">
-                        <i class="pi pi-search" />
-                        <InputText v-model="buscar" placeholder="Buscar"
-                            @keypress.enter="buscarProductos"
-                        /> 
-                    </span> 
-                    <DataTable :value="products" responsiveLayout="scroll">
-                        <Column field="id" header="ID"></Column>
-                        <Column field="codigo_producto" header="COD"></Column>
-                        <Column field="nombre" header="NOMBRE"></Column>
-                        <Column field="precio_sugerido" header="PRECIO_S"></Column>
-                        <Column field="categoria.nombre" header="CAT n"></Column>
-                        
-                        <Column field="accion" header="GESTION">
-                            <template #body="slotProps">
-                                <Button
-                                    icon="pi pi-plus"
-                                    class="p-button-rounded p-button-success"
-                                    aria-label="Eliminar"
-                                    @click="addCarrito(slotProps.data)"
-                                /> 
-                            </template>
-                        </Column>
-                    </DataTable>
-                </template>
-            
-            </Card>
-        </div>-->
-
-        <!--    <div class="col-5">
-            <div class="grid">
-                <div class="col-12">
-                    <div class="card">
-                        <h5>CARRITO</h5>
-                        {{ carrito }}
-                        <DataTable :value="carrito" responsiveLayout="scroll">
-                            <Column field="codigo_lote" header="COD LOT"></Column>
-                            <Column field="codigo_producto" header="COD PROD"></Column>
-                            <Column field="nombre" header="NOMBRE"></Column>
-                            <Column field="precio_sugerido" header="PRECIO_S"></Column>
-                            <Column field="empleado_id" header="EMPLEADO ID"></Column>
-                            
-                            
-                            <Column field="accion" header="ACCION"></Column>   
-                        </DataTable>
-
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="card">
-                        <h5>CLIENTE</h5>
-                            <span class="p-input-icon-left">
-                            <i class="pi pi-search" />
-                            <InputText v-model="buscar_clie" 
-                                placeholder="Buscar por CI/NIT"
-                                @keypress.enter="buscarClientes"
-                            /> 
-                            </span> 
-                                <Button label="Nuevo" icon="pi pi-external-link" @click="visible = true" />
-                                {{ cliente?.id?'':'CLiente No encotrado' }}
-
-                                <h4>CLIENTE: {{ cliente.nombre }}  {{ cliente.apellido }}</h4>
-                                
-                                <h4>CI/NIT: {{ cliente.ci_nit }}</h4>
-                    </div>
-                </div>
-
-                <div class="col-12">
-                    <div class="card">
-                        
-                        <Button label="Guardar" icon="pi pi-check" class="p-button-text" @click="guardarVenta"></Button>
-                    </div>
-                </div>  
-
-            </div>
-        </div>   -->
     </div>
-
 
     <!--<div class="grid">
         <div class="col-12">
@@ -311,58 +226,48 @@ import AuthService from '@/service/AuthService';
 
     const buscarProductos = async() => {
         
-        const {data} = await productoService.filtrar(buscar.value);
+        const { data } = await productoService.filtrar(buscar.value);
         console.log(data.data)
         products.value = data.data;     
     }
 
     const addEntrada = (selectedProv, selectedProd, cant, precio) => { //ent
-        //const { selectedProv , fechaActual, selectedProd, cant, precio} = ent;
-            let e = {
-                selectedProv: selectedProv, //** */
-                fechaActual: fechaActual,
-                selectedProd: selectedProd,
-                cant: cant,
-                precio: precio,
+            //const { selectedProv , fechaActual, selectedProd, cant, precio} = ent;
+            //fechaActual = fechaActual.value;
+            const existe = detalleEntrada.value.find(
+                p => p.codigo_producto === selectedProd
+            )
+
+            if(existe){
+                alert("Producto ya agregado")
+                return
             }
-            console.log(e,'Dentrada')
-            console.log(e.selectedProv, '---SELECTprovv----')
-            console.log(e.selectedProd, '---SELECTprod----')
+            let e = {
+                codigo_producto: selectedProd,
+                cantidad: cant,
+                costo_unitario: precio,
+            }
             detalleEntrada.value.push(e);
-           //console.log(detalleEntrada.value.map(p => p.selectedProd),' ---detalle entrada --------'); // muestra Como array
-            console.log(typeof detalleEntrada.value[0].precio, ': Vector detalle entrada') // muestra el tipo
+
+            /*console.log(typeof detalleEntrada.value[0].costo_unitario, ': Vector detalle entrada') // muestra el tipo */
     }
 
     const guardarEntrada = async () => {
-        let p_total = 0;
-        
-        let producto = selectedProd.value;
-        // VER LA CREACION DE LOTE PARA VER LA CREACION DE ENTRADA 
-        //let f_caducidad = null;
+        let total = 0;
         let estado = 1; // Disponible por defecto
-        let lot = {
-
-            cantidad: detalleEntrada.value[0].cant,
-            fecha_ingreso: detalleEntrada.value[0].fechaActual,
-            costo_unitario: detalleEntrada.value[0].precio,
-            codigo_producto: detalleEntrada.value[0].selectedProd, //LLAVE FORANEA
-            estado: estado
-        }
-        console.log(typeof lot.costo_unitario,' : Tipo costo unitario');
-        
+        detalleEntrada.value.forEach(item => {
+            total += item.cantidad * item.costo_unitario;
+        });
         const datos_ent = {
-            
-            // FECHA => SE PUEDE SACAR DEL BACKEND LA FECHA ACTUAL
-
-            proveedor_id: detalleEntrada.value[0].selectedProv, //LLAVE FORANEA
-            empleado_id, //REVISAR xq es fijo mas no es dinamico, LLAVE FORANEA
-            p_total: detalleEntrada.value[0].cant * detalleEntrada.value[0].precio, // !!! Esta GUARDADO COMO VECTOR CORREGIR PARA QUE SEA UN NUMERO
-
-            
-             
-            lot // OBJETO LOTE, PARA REGISTRAR EN BACKEND
+            proveedor_id: selectedProv.value,
+            empleado_id: empleado_id, //REVISAR xq es fijo
+            //fechaActual: fechaActual.value, //rev si va
+            //p_total: total,
+            productos: detalleEntrada.value
         } 
-        const {data} =await entradaService.guardar(datos_ent)
+        console.log(datos_ent, 'datos entrada a guardar')
+        console.log(JSON.stringify(datos_ent, null, 2))
+        const { data } = await entradaService.guardar(datos_ent)
     }
 
     const addCarrito2 = (lt) => {
