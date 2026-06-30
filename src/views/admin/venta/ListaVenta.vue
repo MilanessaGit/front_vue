@@ -27,7 +27,7 @@
 
               <Column field="id" header="ID"></Column>
               <Column field="codigo_lote" header="COD LOTE"></Column>
-              <Column field="cantidad" header="CANTIDAD EN LOTE"></Column>
+              <Column field="cantidad_actual" header="CANTIDAD EN LOTE"></Column>
               <Column field="costo_unitario" header="COSTO_U EN LOTE"></Column>
               <Column field="pivot.cantidad" header="CANTIDAD DETALLE"></Column>
               <Column field="pivot.precio_unitario" header="PRECIO_U DETALLE"></Column>

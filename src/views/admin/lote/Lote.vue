@@ -8,10 +8,13 @@
             <InputText type="text" id="cod" v-model="lot.codigo_lote" required autofocus  />
         </div> -->
         <div class="field col">
-                <label for="cant">Cantidad</label>
-                <InputNumber id="cant" v-model="lot.cantidad" integeronly></InputNumber>
+                <label for="cant">Cantidad Inicial</label>
+                <InputNumber id="cant" v-model="lot.cantidad_inicial" integeronly></InputNumber>
         </div>
-        
+        <div class="field col">
+                <label for="cant">Cantidad Actual</label>
+                <InputNumber id="cant" v-model="lot.cantidad_actual" integeronly></InputNumber>
+        </div>
         <div class="field">
             <label for="nomp">ID Prod</label>
             <InputText type="text" id="nomp" v-model="lot.producto_id"  />
@@ -63,7 +66,8 @@
     <!-- Columnas -->
     <Column field="id" header="ID"></Column>
     <Column field="codigo_lote" header="COD_LOT"></Column>
-    <Column field="cantidad" header="Cantidad"></Column>
+    <Column field="cantidad_inicial" header="Cantidad Inicial"></Column>
+    <Column field="cantidad_actual" header="Cantidad Actual"></Column>
     
     <Column field="costo_unitario" header="Costo_U">
       <template #body="slotProps">

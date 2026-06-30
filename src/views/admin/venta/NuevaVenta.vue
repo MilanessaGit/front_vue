@@ -24,7 +24,7 @@
                     <DataTable :value="lots" responsiveLayout="scroll">
                         <Column field="id" header="ID"></Column>
                         <Column field="codigo_lote" header="COD LOTE"></Column>
-                        <Column field="cantidad" header="CANTIDAD"></Column>
+                        <Column field="cantidad_actual" header="CANTIDAD"></Column>
                         <!-- Hacer la resta de cantidad cuando se de click en el boton  +  -->
                         <Column field="costo_unitario" header="COSTO_U"></Column>
                         <!--<Column field="producto.codigo_producto" header="PROD COD"></Column>-->
@@ -57,7 +57,7 @@
                         <!--{{ carrito }}-->
                         <DataTable :value="carrito2" responsiveLayout="scroll">
                             <Column field="codigo_lote" header="COD LOT"></Column>
-                            <Column field="cantidad" header="CANT"></Column>
+                            <Column field="cantidad_r" header="CANT"></Column>
                             <Column field="costo_unitario" header="COSTO_U"></Column>
                             <Column field="codigo_producto" header="COD PROD"></Column>
                             <Column field="nombre" header="NOMBRE PROD"></Column>
@@ -229,6 +229,7 @@
 
 <script setup>
 import { onMounted, ref } from 'vue';
+import authService from '@/service/AuthService';
 import loteService from '@/service/LoteService';
 import productoService from '@/service/ProductoService';
 import clienteService from '@/service/ClienteService';
@@ -236,6 +237,7 @@ import clienteService from '@/service/ClienteService';
 //import empleadoService from '@/service/EmpleadoService';//rev no existe en el proyecto, revisar
 import ventaService from '@/service/VentaService';
 import Column from 'primevue/column';
+    const mis_datos = ref(null);
     const products = ref([]);
     const buscar = ref("");
     const carrito = ref([]);
@@ -257,8 +259,13 @@ import Column from 'primevue/column';
         //Lotes con  prod_id
         const {data} = await loteService.listar();
         lots.value = data.data; 
+        perfil(); //llama a la funcion perfil para obtener los datos del usuario logueado
     })
-
+    const perfil = async() => {  
+      const {data} = await authService.getPerfil(); 
+      console.log(data.user.name, 'datos perfil')
+      mis_datos.value = data
+    }
     const buscarProductos = async() => {
         
         const {data} = await productoService.filtrar(buscar.value);
@@ -269,10 +276,11 @@ import Column from 'primevue/column';
     const guardarVenta = async () => {
         const datos_ven = {
             cliente_id: cliente.value.id,
-            empleado_id, //rev xq es fijo mas no es dinamico, revisar**
+            empleado_id: mis_datos.value.user.id,
             lotes: carrito2.value, //carrito.value para productos
             
         } 
+        console.log(datos_ven, 'datos venta a guardar');
         const {data} =await ventaService.guardar(datos_ven)
     }
 
@@ -282,7 +290,7 @@ import Column from 'primevue/column';
         let l = {
             id: id,
             codigo_lote: codigo_lote,  
-            cantidad: 1, // cada vez que se da click en el boton se agrega el producto al carrito2      
+            cantidad_r: 1, // cada vez que se da click en el boton se agrega el producto al carrito2       ** cambiar
             costo_unitario: costo_unitario,
             codigo_producto: producto.codigo_producto,
             nombre : producto.nombre,
@@ -290,7 +298,7 @@ import Column from 'primevue/column';
             //codigo_producto: lt.producto.codigo_producto, // REFERENCIA ** Revisar
 
              // ** Revisar este campo, esta solo cm referencia, no debe estar dentro de "l" LOTE, debe ser extraido de EMPLEADO O USER asi como CLIENTE lo hace 
-            empleado_id : 1 // ** Revisar
+            empleado_id : mis_datos.value.user.id // ** Revisar
         }
         carrito2.value.push(l);
     }

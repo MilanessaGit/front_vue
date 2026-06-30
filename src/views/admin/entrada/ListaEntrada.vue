@@ -3,11 +3,11 @@
   <div class="card">
     <h1>Lista de Entradas</h1>
     <DataTable :value="entradas" tableStyle="min-width: 50rem">
-        <Column field="codigo_entrada" header="CODIGO ENTRADA"></Column>
-        <!-- Considerar si deberia haber cantidad en ventas o en el detalle-->
-        <!--<Column field="cantidad" header="CANTIDAD"></Column>-->
+
+        <Column field="codigo_entrada" header="CODIGO ENTRADA"></Column>  
+        <Column field="tipo_entrada" header="TIPO ENTRADA"></Column>
         <Column field="fecha" header="FECHA"></Column>
-        <Column field="precio_total" header="TOTAL"></Column>
+        <Column field="total" header="TOTAL"></Column>
         
         <Column field="proveedor.nombre" header="PROVEEDOR"></Column>
         <Column field="empleado_id" header="EMPLEADO ID"></Column>
@@ -26,10 +26,11 @@
 
               <Column field="id" header="ID"></Column>
               <Column field="codigo_lote" header="COD LOTE"></Column>
-              <Column field="cantidad" header="CANTIDAD EN LOTE"></Column>
+              <Column field="cantidad_inicial" header="CANTIDAD EN LOTE"></Column>
               <Column field="costo_unitario" header="COSTO_U EN LOTE"></Column>
+
               <Column field="pivot.cantidad" header="CANTIDAD DETALLE"></Column>
-              <Column field="pivot.precio_unitario" header="PRECIO_U DETALLE"></Column>
+              <Column field="pivot.costo_unitario" header="COSTO_U DETALLE"></Column>
             </DataTable>
     </Dialog>
   </div>

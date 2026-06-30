@@ -4,13 +4,14 @@
 
 <Dialog v-model:visible="dialogNuevoProveedor" modal header="Nuevo Proveedor" :style="{ width: '50vw' }" class="p-fluid">
         <!--{{ product }}-->
-    <div class="field">
-        <label for="cod">Ingrese Codigo</label>
-        <InputText type="text" id="cod" v-model="proveedor.id" required autofocus  />
-    </div>
+    
     <div class="field">
         <label for="cod">Ingrese Codigo Proveedor</label>
         <InputText type="text" id="cod" v-model="proveedor.codigo_proveedor" required autofocus  />
+    </div>
+    <div class="field">
+        <label for="ci">Ingrese CI/NIT</label>
+        <InputText type="text" id="ci" v-model="proveedor.ci_nit" required autofocus  />
     </div>
     <div class="field">
         <label for="nom">Ingrese Nombre</label>
@@ -20,10 +21,7 @@
         <label for="ape">Ingrese Apellido</label>
         <InputText type="text" id="ape" v-model="proveedor.apellido" required autofocus  />
     </div>
-    <div class="field">
-        <label for="ci">Ingrese CI/NIT</label>
-        <InputText type="text" id="ci" v-model="proveedor.ci_nit" required autofocus  />
-    </div>
+    
  
     <div class="field">
         <label for="tel">Ingrese Telefono</label>
@@ -59,14 +57,11 @@
     <!-- Columnas -->
     <Column field="id" header="ID"></Column>
     <Column field="codigo_proveedor" header="Codigo Proveedor"></Column>
-    <Column field="nombre" header="Nombre"></Column>
-    <Column field="apellido" header="Apellido"></Column>
     <Column field="ci_nit" header="CI/NIT"></Column>
-    
+    <Column field="nombre" header="Nombre"></Column>
+    <Column field="apellido" header="Apellido"></Column> 
     <Column field="telefono" header="Telefono"></Column>
     <Column field="direccion" header="Direccion"></Column>
-    
-    
     
     <!-- <Column field="estado" header="Estado"> 
       <template #body="slotProps">

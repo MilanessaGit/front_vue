@@ -25,6 +25,10 @@
                         <Dropdown v-model="selectedProv" :options="proovs" optionLabel="nombre" optionValue="id"  placeholder="Select a City" class="w-full md:w-14rem" />
                     </div>
                     <div class="card flex justify-content">
+                        <p>Tipo de Entrada: </p> <br>
+                        <Dropdown v-model="selectedType" :options="tipos" optionLabel="nombre"  placeholder="Selecciona un tipo de entrada" class="w-full md:w-14rem" />
+                    </div>
+                    <div class="card flex justify-content">
                         <p>FECHA: </p> <br>
                         <input type="text" v-model="fechaActual">
                     </div>
@@ -45,7 +49,7 @@
                         </div>     
                         
                     <div class="card flex justify-content">
-                        <P>PRECIO : </P> <br> <InputNumber v-model.number="precio" inputId="integeronly" /> <p></p>
+                        <P>PRECIO(1 unidad): </P> <br> <InputNumber v-model.number="precio" inputId="integeronly" /> <p></p>
                         </div>    
                         {{  cant }}
                         <Button label="Agregar" @click="addEntrada(selectedProv, selectedProd, cant, precio)" />
@@ -91,8 +95,9 @@
                     </span> 
                     
                     <DataTable :value="detalleEntrada" responsiveLayout="scroll">
-                        <Column field="selectedProv" header="PROVEEDOR"></Column>
+                       <!-- <Column field="selectedProv" header="PROVEEDOR"></Column>
                         <Column field="fechaActual" header="FECHA"></Column>
+                        -->
                         <Column field="codigo_producto" header="PRODUCTO"></Column>
                         <!-- Hacer la resta de cantidad cuando se de click en el boton  +  -->
                         <Column field="cantidad" header="CANTIDAD"></Column>
@@ -140,7 +145,7 @@ import proveedorService from '@/service/ProveedorService';
 import categoriaService from '@/service/CategoriaService';
 //import Dropdown from 'primevue/dropdown';
 
-//import empleadoService from '@/service/EmpleadoService';//rev no existe en el proyecto, revisar
+import empleadoService from '@/service/EmpleadoService';//rev no existe en el proyecto, revisar
 import entradaService from '@/service/EntradaService';
 import Column from 'primevue/column';
 import AuthService from '@/service/AuthService';
@@ -172,12 +177,21 @@ import AuthService from '@/service/AuthService';
 
     const empleado = ref({});
     const empleado_id = 1; // ** Revisar este campo cm referencia xq no existe en EMPLEADO, es un dato fijo por ahora para pruebas
+    const empleado_name = '';
     const visible = ref(false);
 
     const lots = ref([]);
     const carrito2 = ref([]);
 
     const selectedProd = ref(null);
+
+    const selectedType = ref(null);
+    const tipos = ref([
+        { id: 1, nombre: 'Compra' },
+        { id: 2, nombre: 'Produccion Propia' },
+        { id: 3, nombre: 'Devolucion Cliente' },
+        { id: 4, nombre: 'Ajuste Positivo' }
+    ]);// 1:compra, 2:produccion_propia, 3:devolucion_clientea 4:juste_positivo
     
     // Bloquear el campo de fecha para que no se pueda editar, ya que se obtiene la fecha actual del sistema
     //const fechaActual = ref(new Date().toISOString().slice(0, 10)); // Obtener la fecha actual en formato YYYY-MM-DD  
@@ -205,7 +219,7 @@ import AuthService from '@/service/AuthService';
     })
 
     const perfil = async() => {  
-      const {data} = await authService.getPerfil();
+      const {data} = await authService.getPerfil(); 
       console.log(data.user.name, 'datos perfil')
       mis_datos.value = data
     }
@@ -257,12 +271,11 @@ import AuthService from '@/service/AuthService';
         let estado = 1; // Disponible por defecto
         detalleEntrada.value.forEach(item => {
             total += item.cantidad * item.costo_unitario;
-        });
+        })
         const datos_ent = {
             proveedor_id: selectedProv.value,
-            empleado_id: empleado_id, //REVISAR xq es fijo
-            //fechaActual: fechaActual.value, //rev si va
-            //p_total: total,
+            empleado_id: mis_datos.value.user.id, //REVISAR xq es fijo
+            tipo_entrada: selectedType.value.nombre,
             productos: detalleEntrada.value
         } 
         console.log(datos_ent, 'datos entrada a guardar')
