@@ -28,7 +28,13 @@ onMounted(async () => {
         <h3>Total Productos</h3>
         <p>{{ totalProductos }}</p>
       </div>
-
+        <h3>Total de productos
+Total de movimientos
+Productos con bajo stock
+Últimas entradas y salidas
+Productos más vendidos
+Predicciones de demanda
+Valor total del inventario</h3>
       <div class="card">
         <h3>Total Ventas</h3>
         <p>{{ totalVentas }}</p>

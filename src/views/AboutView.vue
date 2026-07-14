@@ -9,11 +9,12 @@
     <h3>Rol: {{ mis_datos.role.nombre }} </h3>
     <Button @click="salir">SALIR</Button>
   </div>
-
+    <!--
     <div class="card">
         <div class="flex flex-wrap gap-8">
              <div class="flex-auto">
                 <h5>Image</h5>
+                
                 <Avatar image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" class="mr-2" size="xlarge" shape="circle" />
                 
             </div>
@@ -30,7 +31,7 @@
         
     </div>
     <Button @click="salir">SALIR</Button>
-
+    -->
 </template>
 
 <script>

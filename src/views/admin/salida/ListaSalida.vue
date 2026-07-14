@@ -8,10 +8,8 @@
       <!-- Considerar si deberia haber cantidad en ventas o en el detalle-->
       <!--<Column field="cantidad" header="CANTIDAD"></Column>-->
       <Column field="fecha" header="FECHA"></Column>
-      <Column field="total" header="TOTAL"></Column>
-      
-      
-      <Column field="empleado_id" header="EMPLEADO ID"></Column>
+      <Column field="aprobado_por" header="APROBADO ID"></Column>
+      <Column field="observaciones" header="OBSERVACIONES"></Column>
 
       <Column field="lotes" header="LOTES">
         <template #body="slotProps">
@@ -24,11 +22,11 @@
     <Dialog v-model:visible="visible" modal header="Lotes" :style="{ width: '50vw' }">
             <DataTable :value="lotesDT" tableStyle="min-width: 50rem">
 
-              <Column field="id" header="ID"></Column>
+              <Column field="id" header="ID LOTE"></Column>
               <Column field="codigo_lote" header="COD LOTE"></Column>
-              <Column field="cantidad" header="CANTIDAD EN LOTE"></Column>
+              <Column field="cantidad_actual" header="CANTIDAD EN LOTE"></Column>
               <Column field="costo_unitario" header="COSTO_U EN LOTE"></Column>
-              <Column field="pivot.cantidad" header="CANTIDAD DETALLE"></Column>
+              <Column field="pivot.cantidad" header="CANTIDAD SOLICITADA"></Column>
               
             </DataTable>
     </Dialog>

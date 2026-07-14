@@ -1,262 +1,297 @@
 <template>
-    <div class="grid">
-
-        <div class="col-12">
-            <Card>
-                <template #title> DATOS DE SALIDA </template>
-                <template #content>
-                <p></p>
-                </template>
-            </Card>
-        </div>
-        
-
-        <div class="col-7">
-            <Card>
-                <template #title> LOTES </template>
-                <template #content>
-                    <span class="p-input-icon-left">
-                        <i class="pi pi-search" />
-                        <!--<InputText v-model="buscar" placeholder="Buscar"
-                            @keypress.enter="buscarProductos"/>  --> 
-                            <!-- busca es variable y buscarProductos funcion-->
-                    </span> 
-                    <DataTable :value="lots" responsiveLayout="scroll">
-                        <Column field="id" header="ID"></Column>
-                        <Column field="codigo_lote" header="COD LOTE"></Column>
-                        <Column field="cantidad" header="CANTIDAD"></Column>
-                        <!-- Hacer la resta de cantidad cuando se de click en el boton  +  -->
-                        <Column field="costo_unitario" header="COSTO_U"></Column>
-                        <!--<Column field="producto.codigo_producto" header="PROD COD"></Column>-->
-
-                        <Column field="producto.nombre" header="PROD NOM"></Column>
-                        
-                        <!-- Analizar xq me trae todos los atributos de Productos excepto categoria_id -->
-                        <Column field="accion" header="GESTION">
-                            <template #body="slotProps">
-                                <Button
-                                    icon="pi pi-plus"
-                                    class="p-button-rounded p-button-success"
-                                    aria-label="Eliminar"
-                                    @click="addCarrito2(slotProps.data)"
-                                /> 
-                            </template>
-                        </Column>
-                    </DataTable>
-                </template>
-            
-            </Card>
-        </div>
-
-
-        <div class="col-5">
-            <div class="grid">
-                <div class="col-12">
-                    <div class="card">
-                        <h5>CARRITO S2</h5>
-                        <!--{{ carrito }}-->
-                        <DataTable :value="carrito2" responsiveLayout="scroll">
-                            <Column field="codigo_lote" header="COD LOT"></Column>
-                            <Column field="cantidad" header="CANT"></Column>
-                            <Column field="costo_unitario" header="COSTO_U"></Column>
-                            <Column field="codigo_producto" header="COD PROD"></Column>
-                            <Column field="nombre" header="NOMBRE PROD"></Column>
-                            
-                            <Column field="empleado_id" header="EMPLEADO ID"></Column>
-                            
-                            
-                            <Column field="accion" header="ACCION"></Column>   
-                        </DataTable>
-
-                    </div>
-                </div>
-
-                
-
-                <div class="col-12">
-                    <div class="card">
-                        
-                        <Button label="Guardar" icon="pi pi-check" class="p-button-text" @click="guardarSalida"></Button>
-                    </div>
-                </div>  
-                
-
+    <div class="card">
+        <h2>Registro de Salida</h2>
+        <div class="grid">
+            <!-- Fecha -->
+            <div class="col-12 md:col-6">
+                <label class="font-bold mb-2 block">Fecha</label>
+                <Calendar
+                    v-model="salida.fecha"
+                    disabled
+                    showIcon
+                    dateFormat="dd/mm/yy"
+                    class="w-full"
+                />
             </div>
-        </div> 
 
-        
-        <!--<div class="col-7">
-            <Card>
-                <template #title> PRODUCTOS </template>
-                <template #content>
-                    <span class="p-input-icon-left">
-                        <i class="pi pi-search" />
-                        <InputText v-model="buscar" placeholder="Buscar"
-                            @keypress.enter="buscarProductos"
-                        /> 
-                    </span> 
-                    <DataTable :value="products" responsiveLayout="scroll">
-                        <Column field="id" header="ID"></Column>
-                        <Column field="codigo_producto" header="COD"></Column>
-                        <Column field="nombre" header="NOMBRE"></Column>
-                        <Column field="precio_sugerido" header="PRECIO_S"></Column>
-                        <Column field="categoria.nombre" header="CAT n"></Column>
-                        
-                        <Column field="accion" header="GESTION">
-                            <template #body="slotProps">
-                                <Button
-                                    icon="pi pi-plus"
-                                    class="p-button-rounded p-button-success"
-                                    aria-label="Eliminar"
-                                    @click="addCarrito(slotProps.data)"
-                                /> 
-                            </template>
-                        </Column>
-                    </DataTable>
-                </template>
-            
-            </Card>
-        </div>-->
-
-        <!--    <div class="col-5">
-            <div class="grid">
-                <div class="col-12">
-                    <div class="card">
-                        <h5>CARRITO</h5>
-                        {{ carrito }}
-                        <DataTable :value="carrito" responsiveLayout="scroll">
-                            <Column field="codigo_lote" header="COD LOT"></Column>
-                            <Column field="codigo_producto" header="COD PROD"></Column>
-                            <Column field="nombre" header="NOMBRE"></Column>
-                            <Column field="precio_sugerido" header="PRECIO_S"></Column>
-                            <Column field="empleado_id" header="EMPLEADO ID"></Column>
-                            
-                            
-                            <Column field="accion" header="ACCION"></Column>   
-                        </DataTable>
-
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="card">
-                        <h5>CLIENTE</h5>
-                            <span class="p-input-icon-left">
-                            <i class="pi pi-search" />
-                            <InputText v-model="buscar_clie" 
-                                placeholder="Buscar por CI/NIT"
-                                @keypress.enter="buscarClientes"
-                            /> 
-                            </span> 
-                                <Button label="Nuevo" icon="pi pi-external-link" @click="visible = true" />
-                                {{ cliente?.id?'':'CLiente No encotrado' }}
-
-                                <h4>CLIENTE: {{ cliente.nombre }}  {{ cliente.apellido }}</h4>
-                                
-                                <h4>CI/NIT: {{ cliente.ci_nit }}</h4>
-                    </div>
-                </div>
-
-                <div class="col-12">
-                    <div class="card">
-                        
-                        <Button label="Guardar" icon="pi pi-check" class="p-button-text" @click="guardarVenta"></Button>
-                    </div>
-                </div>  
-
+            <!-- Empleado -->
+            <div class="col-12 md:col-6">
+                <label class="font-bold mb-2 block">Empleado</label>
+                <Dropdown
+                    v-model="salida.empleado_id"
+                    :options="empleados"
+                    optionLabel="nombre"
+                    optionValue="id"
+                    placeholder="Seleccione un empleado"
+                    class="w-full"
+                />
             </div>
-        </div>   -->
+
+            <!-- Tipo -->
+            <div class="col-12 md:col-6">
+                <label class="font-bold mb-2 block">Tipo de salida</label>
+                <Dropdown
+                    v-model="salida.tipo_salida"
+                    :options="tiposSalida"
+                    optionLabel="label"
+                    optionValue="value"
+                    placeholder="Seleccione un tipo"
+                    class="w-full"
+                />
+            </div>
+
+            <!-- Observación -->
+            <div class="col-12">
+                <label class="font-bold mb-2 block">Observación</label>
+                <Textarea
+                    v-model="salida.observacion"
+                    rows="3"
+                    class="w-full"
+                />
+            </div>
+        </div>
     </div>
 
 
+    <div class="card mt-4">
+        <h3>Agregar Producto</h3>
+        <div class="grid align-items-end">
+            <!-- Producto -->
+            <div class="col-12 md:col-6">
+                <label class="font-bold mb-2 block">
+                    Producto
+                </label>
+                <AutoComplete
+                    v-model="productoSeleccionado"
+                    :suggestions="productosFiltrados"
+                    optionLabel="nombre"
+                    @complete="buscarProductos"
+                    forceSelection
+                    placeholder="Escriba el nombre del producto"
+                    class="w-full"
+                />
+            </div>
+            <!-- Cantidad -->
+            <div class="col-12 md:col-2">
+                <label class="font-bold mb-2 block">
+                    Cantidad
+                </label>
+                <InputNumber
+                    v-model="cantidadSeleccionada"
+                    :min="1"
+                    class="w-full"
+                />
+            </div>
+            <!-- Botón -->
+            <div class="col-12 md:col-2">
+                <Button
+                    label="Agregar"
+                    icon="pi pi-plus"
+                    @click="agregarProducto"
+                    class="w-full"
+                />
+            </div>
+        </div>
+
+        <!-- Información del producto -->
+        <div v-if="productoSeleccionado" class="mt-3" >
+            <Tag severity="info">
+                Stock disponible:
+                {{ productoSeleccionado.stock }}
+                unidades
+            </Tag>
+        </div>
+    </div>
+
+
+    <div class="card mt-4">
+        <h3>Detalle de Salida</h3>
+        <DataTable
+            :value="productosSalida"
+            responsiveLayout="scroll"
+            stripedRows
+        >
+            <Column
+                field="nombre"
+                header="Producto"
+            />
+            <Column
+                field="cantidad"
+                header="Cantidad"
+            />
+            <Column
+                field="stock"
+                header="Stock Disponible"
+            />
+            <Column
+                header="Acciones"
+            >
+                <template #body="slotProps">
+                    <Button
+                        icon="pi pi-trash"
+                        severity="danger"
+                        text
+                        @click="eliminarProducto(slotProps.index)"
+                    />
+                </template>
+            </Column>
+        </DataTable>
+    </div>
+
+
+    <div class="flex justify-content-end gap-2 mt-4">
+        <Button
+            label="Cancelar"
+            severity="secondary"
+        />
+        <Button
+            label="Registrar Salida"
+            icon="pi pi-check"
+            @click="guardar"
+        />
+    </div>
     
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
-import loteService from '@/service/LoteService';
-import productoService from '@/service/ProductoService';
-import empleadoService from '@/service/EmpleadoService';
+import { ref, onMounted } from "vue";
+import authService from "@/service/AuthService";
+import productoService from "@/service/ProductoService";
+import empleadoService from "@/service/EmpleadoService";
+import salidaService from "@/service/SalidaService";
 
-//import empleadoService from '@/service/EmpleadoService';//rev no existe en el proyecto, revisar
+//==============================
+// Catálogos
+//==============================
 
-import salidaService from '@/service/SalidaService';
-import Column from 'primevue/column';
+const empleados = ref([]);
 
+const tiposSalida = ref([
+    { label: "Robo", value: 1 },
+    { label: "Pérdida", value: 2 },
+    { label: "Deterioro", value: 3 },
+    { label: "Ajuste Negativo", value: 4 }
+]);
 
-    const products = ref([]);
-    //const buscar = ref("");
-    const carrito = ref([]);
+//==============================
+// Formulario principal
+//==============================
 
-    //const buscar_clie = ref("");
-    //const cliente = ref({});
+const salida = ref({
+    fecha: new Date(),
+    empleado_id: null,
+    tipo_salida: null,
+    observacion: ""
+});
 
-    const empleado = ref({});
-    const empleado_id = 1; // ** Revisar este campo cm referencia xq no existe en EMPLEADO, es un dato fijo por ahora para pruebas
-    const visible = ref(false);
+//==============================
+// AutoComplete
+//==============================
 
-    const lots = ref([]);
-    const carrito2 = ref([]);
-    
-    
+//Producto seleccionado actualmente
+const productoSeleccionado = ref(null);
 
-    onMounted(async () => {
-        // Para solo Productos
-        //const {data} = await productoService.listar();
-        //products.value = data.data; 
+//Lista que mostrará el AutoComplete
+const productosFiltrados = ref([]);
 
-        //Lotes con  prod_id
-        const {data} = await loteService.listar();
-        lots.value = data.data; 
-    })
+//Cantidad que desea sacar el usuario
+const cantidadSeleccionada = ref(1);
 
-    const buscarProductos = async() => {
-        
-        const {data} = await productoService.filtrar(buscar.value);
-        console.log(data.data)
-        products.value = data.data;     
+//==============================
+// Detalle de productos
+//==============================
+
+const productosSalida = ref([]);
+const mis_datos = ref({});
+
+onMounted(async () => {
+    perfil();
+    await cargarEmpleados();
+
+});
+const perfil = async() => {  
+      const {data} = await authService.getPerfil(); 
+      console.log(data.user.name, 'datos perfil')
+      mis_datos.value = data
+    }
+const cargarEmpleados = async () => {
+    try{
+        const { data } = await empleadoService.listar();
+        empleados.value = data.data;
+    }catch(error){
+        console.error(error);
+    }
+}
+
+const buscarProductos = async (event) => {
+    const texto = event.query;
+     console.log("Texto buscado:", texto);
+    if (!texto || texto.length < 2) {
+        productosFiltrados.value = [];
+        return;
+    }
+    try {
+        const { data } = await productoService.buscar(texto, 5);
+        console.log("Respuesta completa:", data);
+        console.log("Productos encontrados:", data.data);
+        productosFiltrados.value = data.data;
+        console.log('productos filtrados value ---- ', productosFiltrados.value)
+       
+    } catch (error) {
+        console.error("Error al buscar productos:", error);
+        productosFiltrados.value = [];
+    }
+}
+
+const agregarProducto = ()=>{
+    if(!productoSeleccionado.value){
+        return;
+    }
+    if(cantidadSeleccionada.value<=0){
+        return;
     }
 
-    const addCarrito2 = (lt) => {
-        const {id, codigo_lote, costo_unitario, producto} = lt;
-        //const c = 1;
-        let l = {
-            id: id,
-            codigo_lote: codigo_lote,  
-            cantidad: 1, // cada vez que se da click en el boton se agrega el producto al carrito2      
-            costo_unitario: costo_unitario,
-            codigo_producto: producto.codigo_producto,
-            nombre : producto.nombre,
+    //Buscar si el producto ya existe en la tabla
+    const existente=productosSalida.value.find(
+        p=>p.producto_id===productoSeleccionado.value.id );
 
-            //codigo_producto: lt.producto.codigo_producto, // REFERENCIA ** Revisar
+    if(existente){
+        existente.cantidad+=cantidadSeleccionada.value;
+    }else{
+        productosSalida.value.push({
+            producto_id:productoSeleccionado.value.id,
+            nombre:productoSeleccionado.value.nombre,
+            stock:productoSeleccionado.value.stock,
+            cantidad:cantidadSeleccionada.value
+        });
+    }
+    limpiarFormularioProducto();
+}
 
-             // ** Revisar este campo, esta solo cm referencia, no debe estar dentro de "l" LOTE, debe ser extraido de EMPLEADO O USER asi como CLIENTE lo hace 
-            empleado_id : 1 // ** Revisar
-        }
-        carrito2.value.push(l);
-    }
-    // Esta funcion no se esta usando, esta como ejemplo para productos.
-    const addCarrito = (prod) => {
-        const {id, codigo_producto, nombre, precio_sugerido} = prod;
-        let p = {
-            id: id,
-            codigo_lote: 1, // ** Revisar 
-            codigo_producto: codigo_producto,
-            nombre: nombre,
-            precio_sugerido: precio_sugerido,
-            cantidad: 1, // ** Revisar este campo cm referencia xq no existe en Producto
-        }
-        carrito.value.push(p);
-    }
+const limpiarFormularioProducto=()=>{
+    productoSeleccionado.value=null;
+    cantidadSeleccionada.value=1;
+}
 
-    const guardarSalida = async () => {
-        const datos_sal = {
-            //cliente_id: cliente.value.id,
-            
-            empleado_id, //rev xq es fijo mas no es dinamico, revisar**
-            lotes: carrito2.value, //carrito.value para productos
-            
-        } 
-        const {data} =await salidaService.guardar(datos_sal)
+const eliminarProducto=(index)=>{
+    productosSalida.value.splice(index,1);
+}
+
+const guardar=async()=>{
+    if(productosSalida.value.length==0){
+        return;
     }
+    const datos={
+        empleado_id:salida.value.empleado_id,
+        tipo_salida:salida.value.tipo_salida,
+        observaciones:salida.value.observacion,
+        productos:productosSalida.value.map(producto=>({
+            producto_id:producto.producto_id,
+            cantidad:producto.cantidad
+        }))
+    };
+    console.log(datos);
+    await salidaService.guardar(datos);
+}
 
 </script>

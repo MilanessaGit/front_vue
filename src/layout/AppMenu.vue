@@ -12,6 +12,7 @@ const menuAdmin = [
         items: [
             { label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/admin/dashboard' },
             { label: 'Perfil', icon: 'pi pi-fw pi-user', to: '/admin/about' },
+            { label: 'Usuarios', icon: 'pi pi-fw pi-users', to: '/admin/usuario' },
             { label: 'Empleados', icon: 'pi pi-fw pi-id-card', to: '/admin/empleado' }
            
            /* { label: 'Categorias', icon: 'pi pi-fw pi-id-card', to: '/uikit/formlayout' },
@@ -65,7 +66,8 @@ const menuAdmin = [
             { label: 'Nueva Salida', icon: 'pi pi-fw pi-eye', to: '/admin/salida/nueva', badge: 'NUEVO' },
             { label: 'Lista Salidas', icon: 'pi pi-fw pi-globe', to: '/admin/salida' } 
         ]
-    },
+    }
+    /*,
     {
         label: 'Gestion Almacen',
         items: [
@@ -73,6 +75,7 @@ const menuAdmin = [
             { label: 'Lista Almacenes', icon: 'pi pi-fw pi-globe', to: '/admin/almacen' } 
         ]
     }
+    */
 ];
 
 const menuSupervisor = [
@@ -104,13 +107,6 @@ const menuSupervisor = [
         items: [
             { label: 'Nueva Salida', icon: 'pi pi-fw pi-eye', to: '/admin/salida/nueva', badge: 'NUEVO' },
             { label: 'Lista Salidas', icon: 'pi pi-fw pi-globe', to: '/admin/salida' } 
-        ]
-    },
-    {
-        label: 'Gestion Almacen',
-        items: [
-            { label: 'Nueva Almacen', icon: 'pi pi-fw pi-eye', to: '/admin/almacen/nueva', badge: 'NUEVO' },
-            { label: 'Lista Almacenes', icon: 'pi pi-fw pi-globe', to: '/admin/almacen' } 
         ]
     }
 ];

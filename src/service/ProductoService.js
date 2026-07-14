@@ -14,6 +14,9 @@ export default {
         
         return http().get(`${rutaRol()}/producto?page=${page}&limit=${limit}`);
     },
+    buscar(q,limit=5){
+        return http().get(`${rutaRol()}/producto?q=${q}&limit=${limit}`);
+    },
     guardar(datos){ 
         return http().post(`${rutaRol()}/producto`, datos); 
     },
@@ -30,8 +33,10 @@ export default {
     guardarImagen(fd, id){
         return http().post(`${rutaRol()}/producto/${id}/imagen`, fd);
     },
+    
     filtrar(q=''){
         return http().get(`${rutaRol()}/producto?q=${q}&limit=5`); //limite de 5 productos
     }
+    
      
 }
