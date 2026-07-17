@@ -23,6 +23,12 @@ const router = createRouter({
       meta: {redirectIfAuth: true} //redirecciona si tiene authentication
     },
     {
+      path: '/register',
+      name: 'Register',
+      component: () => import('../views/auth/Register.vue'),
+      meta: { redirectIfAuth: true }
+    },
+    {
       path: '/admin',
       component: AppLayout,
       children: 

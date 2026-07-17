@@ -27,6 +27,20 @@
                             <a class="font-medium no-underline ml-2 text-right cursor-pointer" style="color: var(--primary-color)">Forgot password?</a>
                         </div>-->
                         <Button label="Ingresar" @click="funIngresar()" class="w-full p-3 text-xl"></Button>
+                        <div class="text-center mt-4">
+                            <span class="text-600">
+                                ¿No tienes una cuenta?
+                            </span>
+
+                            <RouterLink
+                                to="/register"
+                                class="ml-2 font-medium no-underline"
+                                style="color: var(--primary-color);">
+
+                                Registrarse
+
+                            </RouterLink>
+                        </div>
                     </div>
                 </div>
             </div>
