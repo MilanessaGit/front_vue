@@ -6,11 +6,25 @@
                 <template #title> DATOS DE VENTA </template>
                 <template #content>
                 <p></p>
+                <div>
+                    <label class="font-bold mb-2 block">Tipo de venta</label>
+                    <Dropdown
+                        v-model="tipo_venta"
+                        :options="tiposVenta"
+                        optionLabel="label"
+                        optionValue="value"
+                        placeholder="Seleccione un tipo"
+                        class="w-full"
+                    />
+                </div>
                 </template>
             </Card>
+
+
         </div>
         
-
+        
+            
         <div class="col-7">
             <Card>
                 <template #title> LOTES </template>
@@ -242,6 +256,13 @@ import Column from 'primevue/column';
     const buscar = ref("");
     const carrito = ref([]);
 
+    let tipo_venta = ref("");
+    const tiposVenta = ref([
+        { label: "Directa", value: "DIRECTA" },
+        { label: "Reserva", value: "RESERVA" },
+        { label: "Contrato", value: "CONTRATO" }
+    ]);
+
     const buscar_clie = ref("");
     const cliente = ref({});
     const empleado = ref({});
@@ -278,7 +299,7 @@ import Column from 'primevue/column';
             cliente_id: cliente.value.id,
             empleado_id: mis_datos.value.user.id,
             lotes: carrito2.value, //carrito.value para productos
-            
+            tipo_venta: tipo_venta.value
         } 
         console.log(datos_ven, 'datos venta a guardar');
         const {data} =await ventaService.guardar(datos_ven)

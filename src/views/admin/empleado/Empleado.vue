@@ -4,10 +4,7 @@
 
 <Dialog v-model:visible="dialogNuevoEmpleado" modal header="Nuevo Empleado" :style="{ width: '50vw' }" class="p-fluid">
         <!--{{ product }}-->
-    <div class="field">
-        <label for="cod">Ingrese Codigo</label>
-        <InputText type="text" id="cod" v-model="empleado.id" required autofocus  />
-    </div>
+    
     <div class="field">
         <label for="nom">Ingrese Nombre</label>
         <InputText type="text" id="nom" v-model="empleado.nombre" required autofocus  />
@@ -37,7 +34,7 @@
         <label>Usuario: </label>
         <div class="formgrid grid">
             <div class="field-radiobutton col-6" v-for="usr in usuarios" :key="usr.id">
-                <RadioButton :value="usr.id" v-model="empleado.usuario_id"></RadioButton>
+                <RadioButton :value="usr.id" v-model="empleado.user_id"></RadioButton>
                 <label >{{usr.email}}</label>
 
             </div>
@@ -171,8 +168,10 @@ listaUsuarios()
 const guardarEmpleado = async () => {
   console.log(empleado.value)
   if(empleado.value.id){
+    console.log("modificando empleado")
     await empleadoService.modificar(empleado.value.id, empleado.value);
   }else{
+    console.log("guardando empleado")
     await empleadoService.guardar(empleado.value);
   }
     empleado.value = {} 

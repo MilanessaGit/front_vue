@@ -7,7 +7,8 @@
       <Column field="codigo_venta" header="CODIGO VENTA"></Column>
       <!-- Considerar si deberia haber cantidad en ventas o en el detalle-->
       <!--<Column field="cantidad" header="CANTIDAD"></Column>-->
-      <Column field="fecha" header="FECHA"></Column>
+      <Column field="fecha_venta" header="FECHA_VENTA"></Column>
+      <Column field="tipo_venta" header="TIPO_VENTA"></Column>
       <Column field="total" header="TOTAL"></Column>
       
       <Column field="cliente.nombre" header="CLIENTE"></Column>

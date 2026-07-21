@@ -4,10 +4,7 @@
 
 <Dialog v-model:visible="dialogNuevoCliente" modal header="Nuevo Cliente" :style="{ width: '50vw' }" class="p-fluid">
         <!--{{ cliente }}-->
-    <div class="field">
-        <label for="cod">Ingrese Codigo</label>
-        <InputText type="text" id="cod" v-model="cliente.id" required autofocus  />
-    </div>
+    
     <div class="field">
         <label for="nom">Ingrese Nombre</label>
         <InputText type="text" id="nom" v-model="cliente.nombre" required autofocus  />
@@ -145,9 +142,10 @@ listaClientes()
 const guardarCliente = async () => {
   console.log(cliente.value)
   if(cliente.value.id){
-
+    console.log("modificando cliente")
     await clienteService.modificar(cliente.value.id, cliente.value);
   }else{
+    console.log("guardando cliente")
     await clienteService.guardar(cliente.value);
   }
     cliente.value = {} 
