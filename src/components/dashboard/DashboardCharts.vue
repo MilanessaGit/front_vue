@@ -3,7 +3,6 @@ import { ref, watch } from 'vue'
 import Card from 'primevue/card'
 import Chart from 'primevue/chart'
 
-
 const props = defineProps({
     charts: {
         type: Object,
@@ -13,6 +12,7 @@ const props = defineProps({
 
 const ventasSemanaData = ref({})
 const ventasSemanaOptions = ref({})
+
 const ventasMesData = ref({})
 const ventasMesOptions = ref({})
 
@@ -32,14 +32,40 @@ watch(
                 {
                     label: props.charts.ventas_semana.datasets[0].label,
                     data: props.charts.ventas_semana.datasets[0].data,
-                    tension: 0.4,
-                    fill: false
+
+                    borderColor: '#3B82F6',
+                    backgroundColor: 'rgba(59,130,246,.20)',
+
+                    borderWidth: 3,
+
+                    pointBackgroundColor: '#3B82F6',
+                    pointBorderColor: '#ffffff',
+                    pointRadius: 5,
+
+                    tension: .45,
+
+                    fill: true
                 }
             ]
         }
         ventasSemanaOptions.value = {
             responsive: true,
-            maintainAspectRatio: false
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top'
+                }
+            },
+            interaction: {
+                intersect: false,
+                mode: 'index'
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
         }
 
         // Ventas por mes
@@ -48,14 +74,36 @@ watch(
             datasets: [
                 {
                     label: props.charts.ventas_mes.datasets[0].label,
-                    data: props.charts.ventas_mes.datasets[0].data
+                    data: props.charts.ventas_mes.datasets[0].data,
+                    backgroundColor: '#3B82F6',
+                    borderRadius: 10,
+                    borderSkipped: false,
+                    maxBarThickness: 35
                 }
             ]
         }
 
         ventasMesOptions.value = {
             responsive: true,
-            maintainAspectRatio: false
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                x: {
+                    grid: {
+                        display: false
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
+                    }
+                }
+            }
         }
 
         // Productos por categoría
@@ -63,14 +111,34 @@ watch(
             labels: props.charts.productos_categoria.labels,
             datasets: [
                 {
-                    data: props.charts.productos_categoria.datasets[0].data
+                    data: props.charts.productos_categoria.datasets[0].data,
+                    backgroundColor: [
+                        '#3B82F6',
+                        '#10B981',
+                        '#F59E0B',
+                        '#EF4444',
+                        '#8B5CF6',
+                        '#06B6D4',
+                        '#EC4899'
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#ffffff'
                 }
             ]
         }
 
         categoriaOptions.value = {
             responsive: true,
-            maintainAspectRatio: false
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        boxWidth: 15,
+                        padding: 20
+                    }
+                }
+            }
         }
         
         // Productos más vendidos
@@ -79,7 +147,10 @@ watch(
             datasets: [
                 {
                     label: props.charts.productos_mas_vendidos.datasets[0].label,
-                    data: props.charts.productos_mas_vendidos.datasets[0].data
+                    data: props.charts.productos_mas_vendidos.datasets[0].data,
+                    backgroundColor: '#10B981',
+                    borderRadius: 8,
+                    borderSkipped: false
                 }
             ]
         }
@@ -87,9 +158,21 @@ watch(
         vendidosOptions.value = {
             indexAxis: 'y',
             responsive: true,
-            maintainAspectRatio: false
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
+                    }
+                }
+            }
         }
-
     },
     { immediate: true }
 )

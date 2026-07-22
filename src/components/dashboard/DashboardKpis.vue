@@ -1,99 +1,188 @@
+<script setup>
+import Card from 'primevue/card'
+
+defineProps({
+    kpis: {
+        type: Object,
+        required: true
+    }
+})
+
+const cards = [
+
+{
+    titulo:'Productos',
+    valor:'total_productos',
+    icono:'pi pi-box',
+    color:'#2563EB',
+    fondo:'#DBEAFE'
+},
+
+{
+    titulo:'Categorías',
+    valor:'total_categorias',
+    icono:'pi pi-tags',
+    color:'#2563EB',
+    fondo:'#BFDBFE'
+},
+
+{
+    titulo:'Clientes',
+    valor:'total_clientes',
+    icono:'pi pi-users',
+    color:'#7C3AED',
+    fondo:'#E9D5FF'
+},
+
+{
+    titulo:'Proveedores',
+    valor:'total_proveedores',
+    icono:'pi pi-truck',
+    color:'#EA580C',
+    fondo:'#FED7AA'
+},
+
+{
+    titulo:'Empleados',
+    valor:'total_empleados',
+    icono:'pi pi-id-card',
+    color:'#7C3AED',
+    fondo:'#DDD6FE'
+},
+
+{
+    titulo:'Stock Total',
+    valor:'stock_total',
+    icono:'pi pi-shopping-cart',
+    color:'#15803D',
+    fondo:'#BBF7D0'
+},
+
+{
+    titulo:'Ventas del Mes',
+    valor:'ventas_mes',
+    icono:'pi pi-chart-line',
+    color:'#15803D',
+    fondo:'#86EFAC',
+    moneda:true
+},
+
+{
+    titulo:'Compras del Mes',
+    valor:'compras_mes',
+    icono:'pi pi-shopping-bag',
+    color:'#EA580C',
+    fondo:'#FDBA74',
+    moneda:true
+},
+
+{
+    titulo:'Stock Bajo',
+    valor:'productos_stock_bajo',
+    icono:'pi pi-exclamation-triangle',
+    color:'#DC2626',
+    fondo:'#FECACA'
+}
+
+]
+</script>
+
 <template>
 
     <div class="grid">
 
-        <div class="col-12 md:col-6 lg:col-3">
-            <Card>
-                <template #title>Productos</template>
+        <div
+            class="col-12 md:col-6 xl:col-4"
+            v-for="card in cards"
+            :key="card.valor"
+        >
+
+            <Card
+                class="dashboard-card"
+                :style="{
+                    background: card.fondo
+                }"
+            >
                 <template #content>
-                    <h2>{{ kpis.total_productos }}</h2>
+                    <div class="card-content">
+                        <div>
+                            <div class="card-title">
+                                {{ card.titulo }}
+                            </div>
+                            <div
+                                class="card-value"
+                                :style="{ color: card.color }"
+                            >
+                                <template v-if="card.moneda">
+                                    Bs {{ Number(kpis[card.valor]).toFixed(2) }}
+                                </template>
+
+                                <template v-else>
+                                    {{ kpis[card.valor] }}
+                                </template>
+                            </div>
+                        </div>
+
+                        <div
+                            class="icon-box"
+                            :style="{
+                            backgroundColor: card.color,
+                            color: '#fff'
+                        }"
+                        >
+                            <i class="pi"
+                                :class="card.icono">
+                            </i>
+                        </div>
+                    </div>
                 </template>
             </Card>
-        </div>
 
-        <div class="col-12 md:col-6 lg:col-3">
-            <Card>
-                <template #title>Categorías</template>
-                <template #content>
-                    <h2>{{ kpis.total_categorias }}</h2>
-                </template>
-            </Card>
         </div>
-
-        <div class="col-12 md:col-6 lg:col-3">
-            <Card>
-                <template #title>Clientes</template>
-                <template #content>
-                    <h2>{{ kpis.total_clientes }}</h2>
-                </template>
-            </Card>
-        </div>
-
-        <div class="col-12 md:col-6 lg:col-3">
-            <Card>
-                <template #title>Proveedores</template>
-                <template #content>
-                    <h2>{{ kpis.total_proveedores }}</h2>
-                </template>
-            </Card>
-        </div>
-
-        <div class="col-12 md:col-6 lg:col-3">
-            <Card>
-                <template #title>Empleados</template>
-                <template #content>
-                    <h2>{{ kpis.total_empleados }}</h2>
-                </template>
-            </Card>
-        </div>
-
-        <div class="col-12 md:col-6 lg:col-3">
-            <Card>
-                <template #title>Stock Total</template>
-                <template #content>
-                    <h2>{{ kpis.stock_total }}</h2>
-                </template>
-            </Card>
-        </div>
-
-        <div class="col-12 md:col-6 lg:col-3">
-            <Card>
-                <template #title>Ventas del Mes</template>
-                <template #content>
-                    <h2>Bs {{ Number(kpis.ventas_mes).toFixed(2) }}</h2>
-                </template>
-            </Card>
-        </div>
-
-        <div class="col-12 md:col-6 lg:col-3">
-            <Card>
-                <template #title>Compras del Mes</template>
-                <template #content>
-                    <h2>Bs {{ Number(kpis.compras_mes).toFixed(2) }}</h2>
-                </template>
-            </Card>
-        </div>
-
-        <div class="col-12 md:col-6 lg:col-3">
-            <Card>
-                <template #title>Stock Bajo</template>
-                <template #content>
-                    <h2>{{ kpis.productos_stock_bajo }}</h2>
-                </template>
-            </Card>
-        </div>
-
     </div>
-
 </template>
 
-<script setup>
-import Card from 'primevue/card'
+<style scoped>
 
-    defineProps({
-        kpis: {
-            type: Object,
-            required: true
-        }
-    })
-</script>
+.dashboard-card{
+    border:none;
+    border-radius:18px;
+    box-shadow:
+        0 6px 20px rgba(15,23,42,.08);
+}
+
+.dashboard-card:hover{
+    transform:translateY(-6px);
+    box-shadow:
+        0 18px 35px rgba(0,0,0,.14);
+}
+
+.card-content{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.card-title{
+    font-size:1rem;
+    font-weight:600;
+    color:#64748B;
+}
+
+.card-value{
+    font-size:2.3rem;
+    font-weight:700;
+    color:#e1e8f5;
+}
+
+.icon-box{
+    width:70px;
+    height:70px;
+    border-radius:16px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:2rem;
+}
+
+</style>
