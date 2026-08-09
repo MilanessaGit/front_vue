@@ -1,358 +1,727 @@
 <template>
     <div class="grid">
-
+        <!-- DATOS DE VENTA -->
         <div class="col-12">
             <Card>
-                <template #title> DATOS DE VENTA </template>
+                <template #title>DATOS DE VENTA</template>
                 <template #content>
-                <p></p>
-                <div>
-                    <label class="font-bold mb-2 block">Tipo de venta</label>
-                    <Dropdown
-                        v-model="tipo_venta"
-                        :options="tiposVenta"
-                        optionLabel="label"
-                        optionValue="value"
-                        placeholder="Seleccione un tipo"
-                        class="w-full"
-                    />
-                </div>
+                    <div>
+                        <label class="font-bold mb-2 block">Tipo de venta</label>
+                        <Dropdown
+                            v-model="tipo_venta"
+                            :options="tiposVenta"
+                            optionLabel="label"
+                            optionValue="value"
+                            placeholder="Seleccione un tipo"
+                            class="w-full"
+                        />
+                    </div>
                 </template>
-            </Card>
-
-
-        </div>
-        
-        
-            
-        <div class="col-7">
-            <Card>
-                <template #title> LOTES </template>
-                <template #content>
-                    <span class="p-input-icon-left">
-                        <i class="pi pi-search" />
-                        <!--<InputText v-model="buscar" placeholder="Buscar"
-                            @keypress.enter="buscarProductos"/>  --> 
-                            <!-- busca es variable y buscarProductos funcion-->
-                    </span> 
-                    <DataTable :value="lots" responsiveLayout="scroll">
-                        <Column field="id" header="ID"></Column>
-                        <Column field="codigo_lote" header="COD LOTE"></Column>
-                        <Column field="cantidad_actual" header="CANTIDAD"></Column>
-                        <!-- Hacer la resta de cantidad cuando se de click en el boton  +  -->
-                        <Column field="costo_unitario" header="COSTO_U"></Column>
-                        <!--<Column field="producto.codigo_producto" header="PROD COD"></Column>-->
-
-                        <Column field="producto.nombre" header="PROD NOM"></Column>
-                        
-                        <!-- Analizar xq me trae todos los atributos de Productos excepto categoria_id -->
-                        <Column field="accion" header="GESTION">
-                            <template #body="slotProps">
-                                <Button
-                                    icon="pi pi-plus"
-                                    class="p-button-rounded p-button-success"
-                                    aria-label="Eliminar"
-                                    @click="addCarrito2(slotProps.data)"
-                                /> 
-                            </template>
-                        </Column>
-                    </DataTable>
-                </template>
-            
             </Card>
         </div>
 
-
-        <div class="col-5">
-            <div class="grid">
-                <div class="col-12">
-                    <div class="card">
-                        <h5>CARRITO 2</h5>
-                        <!--{{ carrito }}-->
-                        <DataTable :value="carrito2" responsiveLayout="scroll">
-                            <Column field="codigo_lote" header="COD LOT"></Column>
-                            <Column field="cantidad_r" header="CANT"></Column>
-                            <Column field="costo_unitario" header="COSTO_U"></Column>
-                            <Column field="codigo_producto" header="COD PROD"></Column>
-                            <Column field="nombre" header="NOMBRE PROD"></Column>
-                            
-                            <Column field="empleado_id" header="EMPLEADO ID"></Column>
-                            
-                            
-                            <Column field="accion" header="ACCION"></Column>   
-                        </DataTable>
-
-                    </div>
-                </div>
-
-                <div class="col-12">
-                    <div class="card">
-                        <h5>CLIENTE</h5>
-                            <span class="p-input-icon-left">
-                            <i class="pi pi-search" />
-                            <InputText v-model="buscar_clie" 
-                                placeholder="Buscar por CI/NIT"
-                                @keypress.enter="buscarClientes"
-                            /> <!-- busca es variable y buscarProductos funcion-->
-                            </span> 
-                                <Button label="Nuevo" icon="pi pi-external-link" @click="visible = true" />
-                                {{ cliente?.id?'':'CLIENTE NO ENCONTRADO' }}
-
-                                <h4>CLIENTE: {{ cliente.nombre }}  {{ cliente.apellido }}</h4>
-                                
-                                <h4>CI/NIT: {{ cliente.ci_nit }}</h4>
-                    </div>
-                </div>
-
-                <div class="col-12">
-                    <div class="card">
-                        
-                        <Button label="Guardar" icon="pi pi-check" class="p-button-text" @click="guardarVenta"></Button>
-                    </div>
-                </div>  
-                
-
-            </div>
-        </div> 
-
-        
-        <!--<div class="col-7">
+        <!-- PRODUCTOS -->
+        <div class="col-12 md:col-7">
             <Card>
-                <template #title> PRODUCTOS </template>
+                <template #title>PRODUCTOS</template>
                 <template #content>
-                    <span class="p-input-icon-left">
-                        <i class="pi pi-search" />
-                        <InputText v-model="buscar" placeholder="Buscar"
-                            @keypress.enter="buscarProductos"
-                        /> 
-                    </span> 
-                    <DataTable :value="products" responsiveLayout="scroll">
-                        <Column field="id" header="ID"></Column>
-                        <Column field="codigo_producto" header="COD"></Column>
-                        <Column field="nombre" header="NOMBRE"></Column>
-                        <Column field="precio_sugerido" header="PRECIO_S"></Column>
-                        <Column field="categoria.nombre" header="CAT n"></Column>
-                        
-                        <Column field="accion" header="GESTION">
-                            <template #body="slotProps">
-                                <Button
-                                    icon="pi pi-plus"
-                                    class="p-button-rounded p-button-success"
-                                    aria-label="Eliminar"
-                                    @click="addCarrito(slotProps.data)"
-                                /> 
-                            </template>
-                        </Column>
-                    </DataTable>
-                </template>
-            
-            </Card>
-        </div>-->
+                    <div class="grid align-items-end">
+                        <div class="col-12 md:col-7">
+                            <label class="font-bold mb-2 block">Producto</label>
+                            <AutoComplete
+                                v-model="productoSeleccionado"
+                                :suggestions="productosFiltrados"
+                                optionLabel="nombre"
+                                @complete="buscarProductos"
+                                forceSelection
+                                placeholder="Escriba el nombre del producto"
+                                class="w-full"
+                            />
+                        </div>
 
-        <!--    <div class="col-5">
+                        <div class="col-12 md:col-2">
+                            <label class="font-bold mb-2 block">Cantidad</label>
+                            <InputNumber
+                                v-model="cantidadSeleccionada"
+                                :min="1"
+                                class="w-full"
+                            />
+                        </div>
+
+                        <div class="col-12 md:col-3">
+                            <Button
+                                label="Agregar"
+                                icon="pi pi-plus"
+                                class="w-full"
+                                @click="agregarProducto"
+                            />
+                        </div>
+                    </div>
+
+                    <div v-if="productoSeleccionado" class="mt-3">
+                        <strong>Stock disponible:</strong>
+                        {{ productoSeleccionado.stock }} unidades
+                    </div>
+                </template>
+            </Card>
+        </div>
+
+        <!-- DETALLE + CLIENTE + GUARDAR -->
+        <div class="col-12 md:col-5">
             <div class="grid">
                 <div class="col-12">
                     <div class="card">
-                        <h5>CARRITO</h5>
-                        {{ carrito }}
-                        <DataTable :value="carrito" responsiveLayout="scroll">
-                            <Column field="codigo_lote" header="COD LOT"></Column>
-                            <Column field="codigo_producto" header="COD PROD"></Column>
-                            <Column field="nombre" header="NOMBRE"></Column>
-                            <Column field="precio_sugerido" header="PRECIO_S"></Column>
-                            <Column field="empleado_id" header="EMPLEADO ID"></Column>
-                            
-                            
-                            <Column field="accion" header="ACCION"></Column>   
-                        </DataTable>
+                        <h5>DETALLE DE VENTA</h5>
 
+                        <DataTable
+                            :value="productosVenta"
+                            responsiveLayout="scroll"
+                            stripedRows
+                            emptyMessage="No hay productos agregados"
+                        >
+                            <Column field="codigo_producto" header="COD"></Column>
+                            <Column field="nombre" header="PRODUCTO"></Column>
+                            <Column field="cantidad" header="CANT"></Column>
+                            <Column field="stock" header="STOCK"></Column>
+
+                            <Column header="ACCIÓN">
+                                <template #body="slotProps">
+                                    <Button
+                                        icon="pi pi-trash"
+                                        class="p-button-rounded p-button-danger p-button-text"
+                                        @click="eliminarProducto(slotProps.index)"
+                                    />
+                                </template>
+                            </Column>
+                        </DataTable>
                     </div>
                 </div>
+
+                <!-- CLIENTE -->
                 <div class="col-12">
                     <div class="card">
                         <h5>CLIENTE</h5>
-                            <span class="p-input-icon-left">
+
+                        <span class="p-input-icon-left">
                             <i class="pi pi-search" />
-                            <InputText v-model="buscar_clie" 
+
+                            <InputText
+                                v-model="buscar_clie"
                                 placeholder="Buscar por CI/NIT"
                                 @keypress.enter="buscarClientes"
-                            /> 
-                            </span> 
-                                <Button label="Nuevo" icon="pi pi-external-link" @click="visible = true" />
-                                {{ cliente?.id?'':'CLiente No encotrado' }}
+                            />
+                        </span>
 
-                                <h4>CLIENTE: {{ cliente.nombre }}  {{ cliente.apellido }}</h4>
-                                
-                                <h4>CI/NIT: {{ cliente.ci_nit }}</h4>
+                        <Button
+                            label="Nuevo"
+                            icon="pi pi-external-link"
+                            class="ml-2"
+                            @click="abrirNuevoCliente"
+                        />
+
+                        <div v-if="cliente?.id" class="mt-3">
+                            <h4>
+                                CLIENTE:
+                                {{ cliente.nombre }}
+                                {{ cliente.apellido }}
+                            </h4>
+
+                            <h4>
+                                CI/NIT:
+                                {{ cliente.ci_nit }}
+                            </h4>
+                        </div>
+
+                        <div v-else class="mt-3">
+                            CLIENTE NO ENCONTRADO
+                        </div>
                     </div>
                 </div>
 
+                <!-- MENSAJES -->
+                <div class="col-12" v-if="mensaje">
+                    <div
+                        class="card"
+                        :class="
+                            mensajeTipo === 'error'
+                                ? 'text-red-500'
+                                : 'text-green-600'
+                        "
+                    >
+                        {{ mensaje }}
+                    </div>
+                </div>
+
+                <!-- GUARDAR -->
                 <div class="col-12">
                     <div class="card">
-                        
-                        <Button label="Guardar" icon="pi pi-check" class="p-button-text" @click="guardarVenta"></Button>
+                        <Button
+                            label="Guardar Venta"
+                            icon="pi pi-check"
+                            :loading="guardando"
+                            :disabled="guardando"
+                            @click="guardarVenta"
+                        />
                     </div>
-                </div>  
-
+                </div>
             </div>
-        </div>   -->
+        </div>
     </div>
 
-
-    <Dialog v-model:visible="visible" modal header="Nuevo Cliente" :style="{ width: '50vw' }" class="p-fluid">
-        <!--{{ product }} -->
-        <div class="filed">
+    <!-- NUEVO CLIENTE -->
+    <Dialog
+        v-model:visible="visible"
+        modal
+        header="Nuevo Cliente"
+        :style="{ width: '50vw' }"
+        class="p-fluid"
+    >
+        <div class="field">
             <label for="nom">Ingrese Nombres</label>
-            <InputText type="text" id="nom" v-model="cliente.nombre" required autofocus  />
+
+            <InputText
+                type="text"
+                id="nom"
+                v-model="clienteForm.nombre"
+                required
+                autofocus
+            />
         </div>
-        <div class="filed">
-            <label for="nom">Ingrese Apellidos</label>
-            <InputText type="text" id="ap" v-model="cliente.apellido" required autofocus  />
+
+        <div class="field">
+            <label for="ap">Ingrese Apellidos</label>
+
+            <InputText
+                type="text"
+                id="ap"
+                v-model="clienteForm.apellido"
+                required
+            />
         </div>
-        <div class="filed">
+
+        <div class="field">
             <label for="ci">Ingrese CI/NIT</label>
-            <InputText type="text" id="ci" v-model="cliente.ci_nit" required  />
+
+            <InputText
+                type="text"
+                id="ci"
+                v-model="clienteForm.ci_nit"
+                required
+            />
         </div>
-        <div class="filed">
-            <label for="tel">TELEFONO</label>
-            <InputText type="text" id="tel" v-model="cliente.telefono"  />
+
+        <div class="field">
+            <label for="tel">TELÉFONO</label>
+
+            <InputText
+                type="text"
+                id="tel"
+                v-model="clienteForm.telefono"
+            />
         </div>
-        <div class="filed">
-            <label for="dir">DIRECCION</label>
-            <InputText type="text" id="dir" v-model="cliente.direccion"  />
-        </div> 
+
+        <div class="field">
+            <label for="dir">DIRECCIÓN</label>
+
+            <InputText
+                type="text"
+                id="dir"
+                v-model="clienteForm.direccion"
+            />
+        </div>
+
         <template #footer>
-            <Button label="Cancelar" icon="pi pi-times" class="p-button-text" @click="visible=false"></Button>
-            <Button label="Guardar" icon="pi pi-check" class="p-button-text" @click="guardarCliente"></Button>
+            <Button
+                label="Cancelar"
+                icon="pi pi-times"
+                class="p-button-text"
+                @click="visible = false"
+            />
+
+            <Button
+                label="Guardar"
+                icon="pi pi-check"
+                class="p-button-text"
+                @click="guardarCliente"
+            />
         </template>
     </Dialog>
-
-
-    <!--<div class="grid">
-        <div class="col-12">
-            <div class="card"><h5>hola</h5></div>
-        </div>
-        <div class="col-12">
-            <div class="card"><h5>hola2</h5></div>
-        </div>
-        <div class="col-12">
-            <div class="card"><h5>hola3</h5></div>
-        </div>
-    </div>-->
 </template>
 
 <script setup>
 import { onMounted, ref } from 'vue';
+
 import authService from '@/service/AuthService';
-import loteService from '@/service/LoteService';
 import productoService from '@/service/ProductoService';
 import clienteService from '@/service/ClienteService';
-
-//import empleadoService from '@/service/EmpleadoService';//rev no existe en el proyecto, revisar
 import ventaService from '@/service/VentaService';
+
 import Column from 'primevue/column';
-    const mis_datos = ref(null);
-    const products = ref([]);
-    const buscar = ref("");
-    const carrito = ref([]);
 
-    let tipo_venta = ref("");
-    const tiposVenta = ref([
-        { label: "Directa", value: "DIRECTA" },
-        { label: "Reserva", value: "RESERVA" },
-        { label: "Contrato", value: "CONTRATO" }
-    ]);
+// =====================================
+// Datos del usuario autenticado
+// =====================================
 
-    const buscar_clie = ref("");
-    const cliente = ref({});
-    const empleado = ref({});
-    const empleado_id = 1; // ** Revisar este campo cm referencia xq no existe en EMPLEADO, es un dato fijo por ahora para pruebas
-    const visible = ref(false);
+const mis_datos = ref(null);
 
-    const lots = ref([]);
-    const carrito2 = ref([]);
+// =====================================
+// Tipo de venta
+// =====================================
 
-    onMounted(async () => {
-        // Para solo Productos
-        //const {data} = await productoService.listar();
-        //products.value = data.data; 
+const tipo_venta = ref('');
 
-        //Lotes con  prod_id
-        const {data} = await loteService.listar();
-        lots.value = data.data; 
-        perfil(); //llama a la funcion perfil para obtener los datos del usuario logueado
-    })
-    const perfil = async() => {  
-      const {data} = await authService.getPerfil(); 
-      console.log(data.user.name, 'datos perfil')
-      mis_datos.value = data
+const tiposVenta = ref([
+    {
+        label: 'Directa',
+        value: 'DIRECTA'
+    },
+    {
+        label: 'Reserva',
+        value: 'RESERVA'
+    },
+    {
+        label: 'Contrato',
+        value: 'CONTRATO'
     }
-    const buscarProductos = async() => {
-        
-        const {data} = await productoService.filtrar(buscar.value);
-        console.log(data.data)
-        products.value = data.data;     
+]);
+
+// =====================================
+// Productos
+// =====================================
+
+const productoSeleccionado = ref(null);
+
+const productosFiltrados = ref([]);
+
+const cantidadSeleccionada = ref(1);
+
+const productosVenta = ref([]);
+
+// =====================================
+// Cliente
+// =====================================
+
+const buscar_clie = ref('');
+
+const cliente = ref({});
+
+const clienteForm = ref({
+    nombre: '',
+    apellido: '',
+    ci_nit: '',
+    telefono: '',
+    direccion: ''
+});
+
+const visible = ref(false);
+
+// =====================================
+// Estado del formulario
+// =====================================
+
+const guardando = ref(false);
+
+const mensaje = ref('');
+
+const mensajeTipo = ref('');
+
+// =====================================
+// ON MOUNTED
+// =====================================
+
+onMounted(async () => {
+    await perfil();
+});
+
+// =====================================
+// PERFIL
+// =====================================
+
+const perfil = async () => {
+    try {
+        const { data } = await authService.getPerfil();
+
+        mis_datos.value = data;
+    } catch (error) {
+        console.error(
+            'Error al obtener el perfil:',
+            error
+        );
+    }
+};
+
+// =====================================
+// BUSCAR PRODUCTOS
+// =====================================
+
+const buscarProductos = async (event) => {
+    const texto = event.query;
+
+    if (!texto || texto.length < 2) {
+        productosFiltrados.value = [];
+
+        return;
     }
 
-    const guardarVenta = async () => {
-        const datos_ven = {
-            cliente_id: cliente.value.id,
-            empleado_id: mis_datos.value.user.id,
-            lotes: carrito2.value, //carrito.value para productos
-            tipo_venta: tipo_venta.value
-        } 
-        console.log(datos_ven, 'datos venta a guardar');
-        const {data} =await ventaService.guardar(datos_ven)
+    try {
+        const { data } =
+            await productoService.buscar(
+                texto,
+                5
+            );
+
+        productosFiltrados.value =
+            data.data;
+    } catch (error) {
+        console.error(
+            'Error al buscar productos:',
+            error
+        );
+
+        productosFiltrados.value = [];
+    }
+};
+
+// =====================================
+// AGREGAR PRODUCTO
+// =====================================
+
+const agregarProducto = () => {
+    mensaje.value = '';
+
+    if (!productoSeleccionado.value) {
+        mostrarError(
+            'Seleccione un producto.'
+        );
+
+        return;
     }
 
-    const addCarrito2 = (lt) => {
-        const {id, codigo_lote, costo_unitario, producto} = lt;
-        //const c = 1;
-        let l = {
-            id: id,
-            codigo_lote: codigo_lote,  
-            cantidad_r: 1, // cada vez que se da click en el boton se agrega el producto al carrito2       ** cambiar
-            costo_unitario: costo_unitario,
-            codigo_producto: producto.codigo_producto,
-            nombre : producto.nombre,
+    const cantidad =
+        Number(
+            cantidadSeleccionada.value
+        );
 
-            //codigo_producto: lt.producto.codigo_producto, // REFERENCIA ** Revisar
+    const stock =
+        Number(
+            productoSeleccionado.value.stock ?? 0
+        );
 
-             // ** Revisar este campo, esta solo cm referencia, no debe estar dentro de "l" LOTE, debe ser extraido de EMPLEADO O USER asi como CLIENTE lo hace 
-            empleado_id : mis_datos.value.user.id // ** Revisar
-        }
-        carrito2.value.push(l);
-    }
-    // Esta funcion no se esta usando, esta como ejemplo para productos.
-    const addCarrito = (prod) => {
-        const {id, codigo_producto, nombre, precio_sugerido} = prod;
-        let p = {
-            id: id,
-            codigo_lote: 1, // ** Revisar 
-            codigo_producto: codigo_producto,
-            nombre: nombre,
-            precio_sugerido: precio_sugerido,
-            cantidad: 1, // ** Revisar este campo cm referencia xq no existe en Producto
-        }
-        carrito.value.push(p);
+    if (!cantidad || cantidad <= 0) {
+        mostrarError(
+            'La cantidad debe ser mayor a cero.'
+        );
+
+        return;
     }
 
-    const buscarClientes = async() => {
-        //llamar al servicio cliente
-        const { data } = await clienteService.buscar(buscar_clie.value);
-        cliente.value = data
-        console.log('buscar clientes')
+    const existente =
+        productosVenta.value.find(
+            (producto) =>
+                producto.producto_id ===
+                productoSeleccionado.value.id
+        );
+
+    const cantidadTotal =
+        existente
+            ? Number(existente.cantidad) +
+              cantidad
+            : cantidad;
+
+    if (cantidadTotal > stock) {
+        mostrarError(
+            `Stock insuficiente. Disponible: ${stock} unidades.`
+        );
+
+        return;
     }
 
-    const guardarCliente = async() => {
-        //llamar al servicio cliente
-        const { data } = await clienteService.guardar(cliente.value);
-        cliente.value = data
+    if (existente) {
+        existente.cantidad =
+            cantidadTotal;
+    } else {
+        productosVenta.value.push({
+            producto_id:
+                productoSeleccionado.value.id,
+
+            codigo_producto:
+                productoSeleccionado.value
+                    .codigo_producto,
+
+            nombre:
+                productoSeleccionado.value
+                    .nombre,
+
+            stock:
+                stock,
+
+            cantidad:
+                cantidad
+        });
+    }
+
+    limpiarProductoSeleccionado();
+};
+
+// =====================================
+// LIMPIAR PRODUCTO
+// =====================================
+
+const limpiarProductoSeleccionado = () => {
+    productoSeleccionado.value = null;
+
+    cantidadSeleccionada.value = 1;
+};
+
+// =====================================
+// ELIMINAR PRODUCTO
+// =====================================
+
+const eliminarProducto = (index) => {
+    productosVenta.value.splice(
+        index,
+        1
+    );
+};
+
+// =====================================
+// BUSCAR CLIENTE
+// =====================================
+
+const buscarClientes = async () => {
+    mensaje.value = '';
+
+    if (!buscar_clie.value) {
+        mostrarError(
+            'Ingrese un CI/NIT para buscar al cliente.'
+        );
+
+        return;
+    }
+
+    try {
+        const { data } =
+            await clienteService.buscar(
+                buscar_clie.value
+            );
+
+        cliente.value =
+            data || {};
+    } catch (error) {
+        console.error(
+            'Error al buscar cliente:',
+            error
+        );
+
+        cliente.value = {};
+
+        mostrarError(
+            'No se pudo buscar al cliente.'
+        );
+    }
+};
+
+// =====================================
+// ABRIR NUEVO CLIENTE
+// =====================================
+
+const abrirNuevoCliente = () => {
+    clienteForm.value = {
+        nombre: '',
+        apellido: '',
+
+        ci_nit:
+            buscar_clie.value || '',
+
+        telefono: '',
+        direccion: ''
+    };
+
+    visible.value = true;
+};
+
+// =====================================
+// GUARDAR CLIENTE
+// =====================================
+
+const guardarCliente = async () => {
+    try {
+        const { data } =
+            await clienteService.guardar(
+                clienteForm.value
+            );
+
+        cliente.value = data;
+
+        buscar_clie.value =
+            data.ci_nit || '';
 
         visible.value = false;
-        //console.log('guardar clientes')
+
+        mensaje.value =
+            'Cliente registrado correctamente.';
+
+        mensajeTipo.value =
+            'success';
+    } catch (error) {
+        console.error(
+            'Error al guardar cliente:',
+            error
+        );
+
+        mostrarError(
+            'No se pudo registrar el cliente.'
+        );
+    }
+};
+
+// =====================================
+// GUARDAR VENTA
+// =====================================
+
+const guardarVenta = async () => {
+    mensaje.value = '';
+
+    if (!tipo_venta.value) {
+        mostrarError(
+            'Seleccione el tipo de venta.'
+        );
+
+        return;
     }
 
-    
+    if (!cliente.value?.id) {
+        mostrarError(
+            'Seleccione un cliente.'
+        );
 
+        return;
+    }
+
+    if (
+        productosVenta.value.length === 0
+    ) {
+        mostrarError(
+            'Agregue al menos un producto a la venta.'
+        );
+
+        return;
+    }
+
+    if (!mis_datos.value?.user?.id) {
+        mostrarError(
+            'No se pudo identificar al usuario actual.'
+        );
+
+        return;
+    }
+
+    const datosVenta = {
+        cliente_id:
+            cliente.value.id,
+
+        /*
+         * Se mantiene el comportamiento
+         * actual del proyecto.
+         *
+         * Si users.id y empleados.id
+         * no coinciden, revisaremos
+         * únicamente este campo.
+         */
+        empleado_id:
+            mis_datos.value.user.id,
+
+        tipo_venta:
+            tipo_venta.value,
+
+        /*
+         * PAYLOAD PARA FIFO
+         *
+         * Vue solamente envía:
+         *
+         * producto_id
+         * cantidad
+         *
+         * Laravel selecciona
+         * automáticamente los lotes.
+         */
+        productos:
+            productosVenta.value.map(
+                (producto) => ({
+                    producto_id:
+                        producto.producto_id,
+
+                    cantidad:
+                        producto.cantidad
+                })
+            )
+    };
+
+    try {
+        guardando.value = true;
+
+        console.log(
+            'Datos de venta enviados:',
+            datosVenta
+        );
+
+        const { data } =
+            await ventaService.guardar(
+                datosVenta
+            );
+
+        mensaje.value =
+            data.mensaje ||
+            'Venta registrada correctamente.';
+
+        mensajeTipo.value =
+            'success';
+
+        limpiarVenta();
+    } catch (error) {
+        console.error(
+            'Error al registrar venta:',
+            error
+        );
+
+        const respuesta =
+            error?.response?.data;
+
+        mostrarError(
+            respuesta?.error ||
+                respuesta?.mensaje ||
+                'No se pudo registrar la venta.'
+        );
+    } finally {
+        guardando.value = false;
+    }
+};
+
+// =====================================
+// LIMPIAR VENTA
+// =====================================
+
+const limpiarVenta = () => {
+    productosVenta.value = [];
+
+    productoSeleccionado.value = null;
+
+    cantidadSeleccionada.value = 1;
+
+    cliente.value = {};
+
+    buscar_clie.value = '';
+
+    tipo_venta.value = '';
+};
+
+// =====================================
+// MOSTRAR ERROR
+// =====================================
+
+const mostrarError = (texto) => {
+    mensaje.value = texto;
+
+    mensajeTipo.value = 'error';
+};
 </script>
