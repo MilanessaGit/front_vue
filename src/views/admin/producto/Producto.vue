@@ -29,16 +29,34 @@
         <label for="desc">Descripción</label>
         <Textarea id="desc" v-model="product.descripcion"></Textarea>
     </div>
-    <div class="field">
-        <label >Categoria</label>
-        <div class="formgrid grid">
-            <div class="field-radiobutton col-6" v-for="cat in categorias" :key="cat.id">
-                <RadioButton :value="cat.id" v-model="product.categoria_id"></RadioButton>
-                <label >{{cat.nombre}}</label>
+    
 
-            </div>
-        </div>
+    <div class="field">
+      <label class="font-semibold mb-2 block">
+          Categoría
+      </label>
+
+      <div class="formgrid grid">
+          <label
+              v-for="cat in categorias"
+              :key="cat.id"
+              :for="`categoria-${cat.id}`"
+              class="col-12 md:col-6 flex align-items-center gap-2 mb-3 cursor-pointer"
+          >
+              <input
+                  :id="`categoria-${cat.id}`"
+                  v-model="product.categoria_id"
+                  type="radio"
+                  :value="cat.id"
+                  style="width: 18px; height: 18px;"
+              />
+
+              <span>{{ cat.nombre }}</span>
+          </label>
+      </div>
     </div>
+    
+    
     <div class="formgrid grid">
         <div class="field col">
             <label for="pr">Precio</label>

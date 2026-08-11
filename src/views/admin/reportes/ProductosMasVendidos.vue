@@ -39,7 +39,7 @@
                     />
                 </div>
 
-                <div class="col-12 md:col-1 field">
+                <div class="col-12 md:col-3 field" style="width: 8rem;">
                     <label for="ranking-limite" class="block mb-2">Top</label>
                     <Dropdown
                         id="ranking-limite"
@@ -51,7 +51,7 @@
                     />
                 </div>
 
-                <div class="col-12 md:col-2 flex gap-2">
+                <div class="col-12 md:col-fixed report-filter-field">
                     <Button label="Consultar" icon="pi pi-search" class="flex-1" @click="consultar" />
                     <Button
                         icon="pi pi-filter-slash"

@@ -11,3 +11,168 @@ $gutter: 1rem; //for primeflex grid system
 /* Demos */
 @import '@/assets/demo/styles/flags/flags.css';
 @import '@/assets/demo/styles/badges.scss';
+
+/* =========================================================
+   Correcciones globales visuales - Proyecto Aries J&B
+   Compatible con Vue 3 + PrimeVue 3.x
+   ========================================================= */
+
+/* -----------------------------------------
+   Elementos accesibles internos de PrimeVue
+   Evita que inputs ocultos aparezcan visualmente
+   (RadioButton, Dropdown, etc.)
+   ----------------------------------------- */
+.p-hidden-accessible {
+    border: 0 !important;
+    clip: rect(0 0 0 0) !important;
+    height: 1px !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    position: absolute !important;
+    width: 1px !important;
+    white-space: nowrap !important;
+}
+
+/* -----------------------------------------
+   Dialog: título a la izquierda y X a la derecha
+   ----------------------------------------- */
+.p-dialog .p-dialog-header {
+    display: flex !important;
+    align-items: center !important;
+    width: 100%;
+}
+
+.p-dialog .p-dialog-header .p-dialog-title {
+    order: 1;
+    min-width: 0;
+}
+
+.p-dialog .p-dialog-header .p-dialog-header-icons {
+    order: 2;
+    margin-left: auto !important;
+    margin-right: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+}
+
+/* -----------------------------------------
+   Calendar: input y botón calendario alineados
+   ----------------------------------------- */
+.p-calendar {
+    width: 100%;
+    display: flex !important;
+    align-items: stretch;
+}
+
+.p-calendar .p-inputtext {
+    flex: 1 1 auto;
+    width: 1%;
+    min-width: 0;
+}
+
+.p-calendar .p-datepicker-trigger,
+.p-calendar > .p-button {
+    flex: 0 0 auto;
+    min-width: 3rem;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* -----------------------------------------
+   Dropdown y componentes con trigger
+   ----------------------------------------- */
+.p-dropdown,
+.p-multiselect,
+.p-autocomplete,
+.p-inputnumber {
+    width: 100%;
+}
+
+.p-dropdown {
+    display: flex !important;
+    align-items: center !important;
+}
+
+.p-dropdown .p-dropdown-label {
+    flex: 1 1 auto;
+    width: 1%;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 0.25rem !important;
+}
+
+.p-dropdown .p-dropdown-trigger {
+    flex: 0 0 2.25rem;
+    width: 2.25rem;
+    min-width: 2.25rem;
+    margin-left: auto;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.p-dropdown-panel .p-dropdown-items,
+.p-dropdown-panel .p-dropdown-items-wrapper ul,
+.p-autocomplete-panel .p-autocomplete-items,
+.p-multiselect-panel .p-multiselect-items,
+.p-listbox .p-listbox-list,
+.p-selectbutton,
+.p-orderlist .p-orderlist-list,
+.p-picklist .p-picklist-list {
+    list-style: none !important;
+    margin: 0 !important;
+    padding-left: 0 !important;
+}
+
+.p-dropdown-panel .p-dropdown-item,
+.p-autocomplete-panel .p-autocomplete-item,
+.p-multiselect-panel .p-multiselect-item,
+.p-listbox .p-listbox-item,
+.p-orderlist .p-orderlist-item,
+.p-picklist .p-picklist-item {
+    list-style: none !important;
+}
+
+/* -----------------------------------------
+   RadioButton / Checkboxes: mejor alineación global
+   ----------------------------------------- */
+.field-radiobutton,
+.field-checkbox {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.65rem;
+    margin-bottom: 0.75rem;
+}
+
+.field-radiobutton .p-radiobutton,
+.field-checkbox .p-checkbox {
+    flex: 0 0 auto;
+}
+
+.field-radiobutton label,
+.field-checkbox label {
+    margin: 0 !important;
+    line-height: 1.35;
+    cursor: pointer;
+}
+
+/* -----------------------------------------
+   Dialogs en móvil
+   ----------------------------------------- */
+@media screen and (max-width: 575px) {
+    .p-dialog {
+        max-width: 95vw;
+    }
+
+    .p-dialog .p-dialog-header,
+    .p-dialog .p-dialog-content,
+    .p-dialog .p-dialog-footer {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}

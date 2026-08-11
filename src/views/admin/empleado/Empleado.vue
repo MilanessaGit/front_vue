@@ -29,18 +29,29 @@
         <label for="desc">Direccion</label>
         <Textarea id="desc" v-model="empleado.direccion"></Textarea>
     </div>
-
+//
     <div class="field">
-        <label>Usuario: </label>
-        <div class="formgrid grid">
-            <div class="field-radiobutton col-6" v-for="usr in usuarios" :key="usr.id">
-                <RadioButton :value="usr.id" v-model="empleado.user_id"></RadioButton>
-                <label >{{usr.email}}</label>
+        <label class="font-semibold mb-3 block">Usuario</label>
 
-            </div>
+        <div class="formgrid grid">
+            <label
+                v-for="usr in usuarios"
+                :key="usr.id"
+                :for="`usuario-${usr.id}`"
+                class="col-12 md:col-6 flex align-items-center gap-2 mb-3 cursor-pointer"
+            >
+                <input
+                    :id="`usuario-${usr.id}`"
+                    v-model="empleado.user_id"
+                    type="radio"
+                    :value="usr.id"
+                    style="width: 18px; height: 18px;"
+                />
+                <span>{{ usr.email }}</span>
+            </label>
         </div>
     </div>
-
+//
     <template #footer>
         <Button label="Cancelar" icon="pi pi-times" class="p-button-text" @click="cerrarDialogEmpleado"></Button>
         <Button label="Guardar" icon="pi pi-check" class="p-button-text" @click="guardarEmpleado"></Button>
