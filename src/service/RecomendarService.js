@@ -1,4 +1,13 @@
-import { http } from "./HttpAxios"
+
+import { http } from "./HttpAxios";
+
+export default {
+    obtener(productoId) {
+        return http().get(`/recomendar/${productoId}`);
+    }
+};
+
+/*import { http } from "./HttpAxios"
 
 export default {
     listar(){
@@ -18,3 +27,4 @@ export default {
         return http().delete(`/admin/recomendar/${id}`);
     }
 }
+*/

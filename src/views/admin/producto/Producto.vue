@@ -1,18 +1,5 @@
 <template>
 
-<div v-if="cargando">Buscando recomendaciones...</div>
-
-<div v-if="recomendaciones.length">
-  <h3>Productos recomendados</h3>
-
-  <div v-for="p in recomendaciones" :key="p.id">
-    Producto ID: {{ p.id }} |
-    Categoría: {{ p.categoria_id }} |
-    Stock: {{ p.stock_total }}
-  </div>
-</div>
-
-
 <Button v-if="puedeCrear" label="Nuevo producto" icon="pi pi-external-link" @click="abrirDialogProducto" />
 
 <Dialog v-model:visible="dialogNuevoProducto" modal header="Nuevo Producto" :style="{ width: '50vw' }" class="p-fluid">
@@ -60,7 +47,7 @@
     <div class="formgrid grid">
         <div class="field col">
             <label for="pr">Precio</label>
-            <InputNumber id="pr" v-model="product.precio_sugerido" mode="currency" currency="USD" locale="en-US"></InputNumber>
+            <InputNumber id="pr" v-model="product.precio_sugerido" mode="currency" currency="BOB" locale="es-BO" :minFractionDigits="2" :maxFractionDigits="2"></InputNumber>
         </div>
         <!--<div class="field col">
             <label for="cant">Cantidad</label>
@@ -97,8 +84,8 @@
       <template #body="slotProps">
         <img
         
-          :src="slotProps.data.imagen?`http://127.0.0.1:8000/${slotProps.data.imagen}`:`https://img.freepik.com/vector-premium/vector-icono-imagen-predeterminado-pagina-imagen-faltante-diseno-sitio-web-o-aplicacion-movil-no-hay-foto-disponible_87543-11093.jpg`"
-          :alt="slotProps.data.imagen"
+          :src="obtenerUrlImagen(slotProps.data.imagen)"
+          :alt="slotProps.data.nombre || 'Imagen del producto'"
           class="w-6rem shadow-2 border-round"
         />
         <Button icon="pi pi-camera" @click="seleccionarImagen(slotProps.data.id)" />
@@ -126,7 +113,13 @@
     <Column field="acciones" header="Accion">
       <template #body="slotProps">        
 
-          <button @click="obtenerRecomendaciones(slotProps.data.id)"> Ver productos similares 🤖</button>
+          <Button
+            label="Similares"
+            icon="pi pi-search"
+            class="p-button-sm p-button-outlined p-button-info mr-2"
+            :loading="cargando && productoConsultandoId === slotProps.data.id"
+            @click="obtenerRecomendaciones(slotProps.data)"
+          />
 
           <Button v-if="puedeEditar" icon="pi pi-pencil" class="p-button-rounded p-button-warning" rounded  @click="editarProducto(slotProps.data)" />
           <Button v-if="puedeEliminar" icon="pi pi-times" class="p-button-rounded p-button-danger" aria-label="Eliminar" @click="eliminarProducto(slotProps.data.id)" />
@@ -137,6 +130,70 @@
       En total hay {{ totalRecords ? totalRecords : 0 }} productos. <!--Si existe totalRecords muestra sino pon 0 -->
     </template>
   </DataTable>
+
+
+<!-- Recomendaciones KNN -->
+<Dialog
+  v-model:visible="dialogRecomendaciones"
+  modal
+  header="Productos similares"
+  :style="{ width: '720px' }"
+  :breakpoints="{ '960px': '85vw', '640px': '95vw' }"
+>
+  <div v-if="productoBaseRecomendacion" class="mb-4 p-3 surface-100 border-round">
+    <div class="text-600 text-sm mb-1">Producto de referencia</div>
+    <div class="font-semibold text-lg">{{ productoBaseRecomendacion.nombre }}</div>
+    <div class="text-600 mt-1">
+      {{ productoBaseRecomendacion.categoria?.nombre || 'Sin categoría' }}
+      · {{ formatCurrency(Number(productoBaseRecomendacion.precio_sugerido || 0)) }}
+    </div>
+  </div>
+
+  <div v-if="cargando" class="flex flex-column align-items-center justify-content-center py-5 gap-3">
+    <i class="pi pi-spin pi-spinner text-3xl"></i>
+    <span>Buscando productos similares...</span>
+  </div>
+
+  <div v-else-if="recomendaciones.length" class="grid">
+    <div
+      v-for="p in recomendaciones"
+      :key="p.id"
+      class="col-12 md:col-6"
+    >
+      <div class="surface-card border-1 surface-border border-round p-3 h-full">
+        <div class="flex justify-content-between align-items-start gap-2 mb-2">
+          <div>
+            <div class="font-semibold text-lg">{{ p.nombre }}</div>
+            <div class="text-600 text-sm">{{ p.codigo_producto }}</div>
+          </div>
+          <span class="knn-stock">Stock: {{ p.stock }}</span>
+        </div>
+
+        <div class="text-600 mb-2">
+          {{ p.categoria?.nombre || 'Sin categoría' }}
+        </div>
+
+        <div class="font-semibold text-primary text-lg">
+          {{ formatCurrency(Number(p.precio_sugerido || 0)) }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div v-else class="text-center py-5 text-600">
+    <i class="pi pi-info-circle text-3xl mb-3 block"></i>
+    {{ mensajeRecomendacion || 'No se encontraron productos similares disponibles.' }}
+  </div>
+
+  <template #footer>
+    <Button
+      label="Cerrar"
+      icon="pi pi-times"
+      class="p-button-text"
+      @click="dialogRecomendaciones = false"
+    />
+  </template>
+</Dialog>
 
 
 <Dialog v-model:visible="visible_img" modal header="Subir Imagen" :style="{ width: '50vw' }">
@@ -153,7 +210,7 @@
 import { ref } from "vue";
 import productoService from "@/service/ProductoService";
 import categoriaService from "@/service/CategoriaService";
-import axios from 'axios'
+import recomendarService from "@/service/RecomendarService"
 
 const products = ref([]);
 const dialogNuevoProducto = ref(false)
@@ -268,28 +325,88 @@ const eliminarProducto = async (id) => {
 }
 
 const formatCurrency = (value) => {
-    return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
-};
+  const numero = Number(value || 0)
+
+  return new Intl.NumberFormat('es-BO', {
+    style: 'currency',
+    currency: 'BOB',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(numero)
+}
+
+// La URL de las imágenes utiliza el mismo servidor configurado para la API.
+// Esto evita depender de 127.0.0.1 y permite visualizar imágenes desde celular.
+const apiUrl = import.meta.env.VITE_API_URL || ''
+const backendUrl = apiUrl.replace(/\/api\/?$/, '')
+
+const obtenerUrlImagen = (imagen) => {
+  if (!imagen) {
+    return 'https://img.freepik.com/vector-premium/vector-icono-imagen-predeterminado-pagina-imagen-faltante-diseno-sitio-web-o-aplicacion-movil-no-hay-foto-disponible_87543-11093.jpg'
+  }
+
+  if (/^https?:\/\//i.test(imagen)) {
+    return imagen
+  }
+
+  return `${backendUrl}/${String(imagen).replace(/^\/+/, '')}`
+}
 
 
-//
+
+// =====================================
+// Recomendaciones KNN
+// =====================================
 const recomendaciones = ref([])
 const cargando = ref(false)
+const dialogRecomendaciones = ref(false)
+const mensajeRecomendacion = ref('')
+const productoBaseRecomendacion = ref(null)
+const productoConsultandoId = ref(null)
 
-const obtenerRecomendaciones = async (productoId) => {
+const obtenerRecomendaciones = async (productoSeleccionado) => {
+  productoBaseRecomendacion.value = productoSeleccionado
+  productoConsultandoId.value = productoSeleccionado.id
+  recomendaciones.value = []
+  mensajeRecomendacion.value = ''
+  dialogRecomendaciones.value = true
   cargando.value = true
 
   try {
-    const res = await axios.get(
-      `http://localhost:8000/api/recomendar/${productoId}`
-    )
-    recomendaciones.value = res.data
-  } catch (error) {
-    console.error(error)
-  }
+    const { data } = await recomendarService.obtener(productoSeleccionado.id)
 
-  cargando.value = false
+    recomendaciones.value = Array.isArray(data.resultados)
+      ? data.resultados
+      : []
+
+    mensajeRecomendacion.value = data.mensaje || ''
+  } catch (error) {
+    console.error('Error al obtener recomendaciones KNN:', error)
+
+    recomendaciones.value = []
+    mensajeRecomendacion.value =
+      error?.response?.data?.mensaje ||
+      'No se pudieron obtener las recomendaciones. Verifique que el servicio KNN esté disponible.'
+  } finally {
+    cargando.value = false
+    productoConsultandoId.value = null
+  }
 }
 
 
 </script>
+
+
+<style scoped>
+.knn-stock {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  padding: 0.3rem 0.6rem;
+  border-radius: 999px;
+  background: var(--green-50);
+  color: var(--green-700);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+</style>
