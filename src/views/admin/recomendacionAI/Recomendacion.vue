@@ -21,7 +21,6 @@
 <script>
 import axios from "axios";
 
-
 export default {
   data() {
     return {
@@ -30,8 +29,9 @@ export default {
   },
   methods: {
     async verRecomendaciones(id) {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
       const response = await axios.post(
-        "http://localhost:8000/api/admin/recomendar",
+        `${API_URL}/api/admin/recomendar`,
         { producto_id: id }
       );
 
