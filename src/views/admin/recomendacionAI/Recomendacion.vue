@@ -31,7 +31,7 @@ export default {
     async verRecomendaciones(id) {
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
       const response = await axios.post(
-        `${API_URL}/api/admin/recomendar`,
+        `${API_URL}/admin/recomendar`,
         { producto_id: id }
       );
 
