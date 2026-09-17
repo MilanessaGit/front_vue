@@ -36,7 +36,9 @@ export default {
     
     filtrar(q=''){
         return http().get(`${rutaRol()}/producto?q=${q}&limit=5`); //limite de 5 productos
+    },
+    listarTodos(){
+        return http().get(`${rutaRol()}/producto/todos`);
     }
-    
      
 }

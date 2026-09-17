@@ -355,9 +355,17 @@
                                 </template>
                             </Column>
 
-                            <Column header="Precio" style="width: 9rem">
+                            <Column header="Precio" style="width: 12rem">
                                 <template #body="slotProps">
-                                    <strong>{{ formatoBs(slotProps.data.precio_unitario) }}</strong>
+                                   <!-- <strong>{{ formatoBs(slotProps.data.precio_unitario) }}</strong> -->
+                                    <InputNumber
+                                        v-model="slotProps.data.precio_unitario"
+                                        mode="currency"
+                                        currency="BOB"
+                                        locale="es-BO"
+                                        :min="0"
+                                        class="w-full"
+                                    />
                                 </template>
                             </Column>
 
@@ -1069,6 +1077,18 @@ const guardarVenta = async () => {
         return;
     }
 
+    const preciosValidos = productosVenta.value.every(
+        (producto) =>
+            producto.precio_unitario &&
+            Number(producto.precio_unitario) > 0
+    );
+
+    if (!preciosValidos) {
+        mostrarError('Todos los productos deben tener un precio válido.');
+        confirmacionVisible.value = false;
+        return;
+    }
+
     const datosVenta = {
         cliente_id: cliente.value.id,
 
@@ -1089,7 +1109,8 @@ const guardarVenta = async () => {
         // FIFO: Vue envía producto + cantidad. Laravel decide los lotes.
         productos: productosVenta.value.map((producto) => ({
             producto_id: producto.producto_id,
-            cantidad: Number(producto.cantidad)
+            cantidad: Number(producto.cantidad),
+            precio_unitario: Number(producto.precio_unitario) // new
         }))
     };
 

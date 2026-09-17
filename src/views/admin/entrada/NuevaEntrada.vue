@@ -313,7 +313,7 @@ const cargarProveedores = async () => {
 
 const cargarProductos = async () => {
     try {
-        const { data } = await productoService.listar();
+        const { data } = await productoService.listarTodos();//productoService.listar();
         products.value = data?.data || [];
     } catch (error) {
         console.error('Error al cargar productos:', error);
