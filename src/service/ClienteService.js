@@ -26,9 +26,15 @@ export default {
     eliminar(id){
         return http().delete(`${rutaRol()}/cliente/${id}`);
     },
-    
-    buscar(q=''){
-        return http().get(`${rutaRol()}/cliente?q=${q}&limit=5`); //limite de 5 clientes
+
+    buscar(q = '') {
+        return http().get(
+            `${rutaRol()}/cliente?q=${encodeURIComponent(q)}&limit=10`
+        );
     }
+    
+    /*buscar(q=''){
+        return http().get(`${rutaRol()}/cliente?q=${q}&limit=5`); //limite de 5 clientes
+    }*/
      
 }

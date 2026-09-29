@@ -2,8 +2,13 @@ import { http } from "./HttpAxios"
 import { rutaRol } from "@/utils/rolRuta";
 
 export default {
-    listar(){
+    /*listar(){
         return http().get(`${rutaRol()}/salida`);
+    },*/
+    listar(page = 1){
+
+        return http().get(`${rutaRol()}/salida?page=${page}`);
+
     },
     guardar(datos){
         console.log(datos)

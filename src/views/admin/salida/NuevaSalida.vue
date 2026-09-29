@@ -14,7 +14,7 @@
                 />
             </div>
 
-            <!-- Empleado -->
+            <!-- Empleado
             <div class="col-12 md:col-6">
                 <label class="font-bold mb-2 block">Empleado</label>
                 <Dropdown
@@ -25,7 +25,19 @@
                     placeholder="Seleccione un empleado"
                     class="w-full"
                 />
+            </div> -->
+            <div class="col-12 md:col-6">
+                <label class="font-bold mb-2 block">
+                    Responsable
+                </label>
+
+                <InputText
+                    :value="mis_datos?.user?.name || 'Cargando...'"
+                    disabled
+                    class="w-full"
+                />
             </div>
+
 
             <!-- Tipo -->
             <div class="col-12 md:col-6">
@@ -72,18 +84,19 @@
                 />
             </div>
             <!-- Cantidad -->
-            <div class="col-12 md:col-2">
+            <div class="col-12 md:col-2 lg:col-2">
                 <label class="font-bold mb-2 block">
                     Cantidad
                 </label>
                 <InputNumber
                     v-model="cantidadSeleccionada"
                     :min="1"
+                    :max="productoSeleccionado?.stock || 1"
                     class="w-full"
                 />
             </div>
             <!-- Botón -->
-            <div class="col-12 md:col-2">
+            <div class="col-12 md:col-2 lg:col-2">
                 <Button
                     label="Agregar"
                     icon="pi pi-plus"
@@ -109,6 +122,7 @@
         <DataTable
             :value="productosSalida"
             responsiveLayout="scroll"
+            scrollable
             stripedRows
         >
             <Column
@@ -144,11 +158,20 @@
             label="Cancelar"
             severity="secondary"
         />
+
+        <Button
+            label="Lista de Salidas"
+            severity="info"
+            icon="pi pi-list"
+            @click="router.push('/admin/salida')"
+        />
+
         <Button
             label="Registrar Salida"
             icon="pi pi-check"
             @click="guardar"
         />
+        
     </div>
     
 </template>
@@ -157,20 +180,23 @@
 import { ref, onMounted } from "vue";
 import authService from "@/service/AuthService";
 import productoService from "@/service/ProductoService";
-import empleadoService from "@/service/EmpleadoService";
+//import empleadoService from "@/service/EmpleadoService";
 import salidaService from "@/service/SalidaService";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 //==============================
 // Catálogos
 //==============================
 
-const empleados = ref([]);
+//const empleados = ref([]);
 
 const tiposSalida = ref([
-    { label: "Robo", value: 1 },
-    { label: "Pérdida", value: 2 },
-    { label: "Deterioro", value: 3 },
-    { label: "Ajuste Negativo", value: 4 }
+    { label: "Robo", value: 2 },
+    { label: "Pérdida", value: 3 },
+    { label: "Deterioro", value: 4 },
+    { label: "Ajuste Negativo", value: 5 }
 ]);
 
 //==============================
@@ -179,7 +205,8 @@ const tiposSalida = ref([
 
 const salida = ref({
     fecha: new Date(),
-    empleado_id: null,
+    //empleado_id: null,
+    //mis_datos.value.user.id,
     tipo_salida: null,
     observacion: ""
 });
@@ -206,22 +233,22 @@ const mis_datos = ref({});
 
 onMounted(async () => {
     perfil();
-    await cargarEmpleados();
+    // await cargarEmpleados();
 
 });
 const perfil = async() => {  
       const {data} = await authService.getPerfil(); 
-      console.log(data.user.name, 'datos perfil')
+      console.log(data, 'datos perfil')//user.name
       mis_datos.value = data
     }
-const cargarEmpleados = async () => {
+/*const cargarEmpleados = async () => {
     try{
         const { data } = await empleadoService.listar();
         empleados.value = data.data;
     }catch(error){
         console.error(error);
     }
-}
+}*/
 
 const buscarProductos = async (event) => {
     const texto = event.query;
@@ -243,7 +270,7 @@ const buscarProductos = async (event) => {
     }
 }
 
-const agregarProducto = ()=>{
+/*const agregarProducto = ()=>{
     if(!productoSeleccionado.value){
         return;
     }
@@ -266,7 +293,49 @@ const agregarProducto = ()=>{
         });
     }
     limpiarFormularioProducto();
-}
+}*/
+const agregarProducto = () => {
+    if (!productoSeleccionado.value) {
+        return;
+    }
+
+    const cantidad = Number(cantidadSeleccionada.value || 0);
+    const stock = Number(productoSeleccionado.value.stock || 0);
+
+    if (cantidad <= 0) {
+        return;
+    }
+
+    if (stock <= 0) {
+        return;
+    }
+
+    const existente = productosSalida.value.find(
+        p => p.producto_id === productoSeleccionado.value.id
+    );
+
+    const cantidadActual = Number(existente?.cantidad || 0);
+    const cantidadTotal = cantidadActual + cantidad;
+
+    if (cantidadTotal > stock) {
+        alert(`Stock insuficiente. Disponible: ${stock} unidades.`);
+        return;
+    }
+
+    if (existente) {
+        existente.cantidad = cantidadTotal;
+    } else {
+        productosSalida.value.push({
+            producto_id: productoSeleccionado.value.id,
+            nombre: productoSeleccionado.value.nombre,
+            stock,
+            cantidad
+        });
+    }
+
+    limpiarFormularioProducto();
+};
+
 
 const limpiarFormularioProducto=()=>{
     productoSeleccionado.value=null;
@@ -277,14 +346,16 @@ const eliminarProducto=(index)=>{
     productosSalida.value.splice(index,1);
 }
 
-const guardar=async()=>{
+/*const guardar=async()=>{
     if(productosSalida.value.length==0){
         return;
     }
     const datos={
-        empleado_id:salida.value.empleado_id,
+        //empleado_id:salida.value.empleado_id,
+        empleado_id:mis_datos.value.user.id,
         tipo_salida:salida.value.tipo_salida,
         observaciones:salida.value.observacion,
+
         productos:productosSalida.value.map(producto=>({
             producto_id:producto.producto_id,
             cantidad:producto.cantidad
@@ -292,6 +363,49 @@ const guardar=async()=>{
     };
     console.log(datos);
     await salidaService.guardar(datos);
+}
+*/
+const guardar = async()=>{
+
+    if(productosSalida.value.length==0){
+        alert("Debe agregar al menos un producto");
+        return;
+    }
+
+    try{
+
+        const datos={
+            empleado_id:mis_datos.value.user.empleado.id,
+            tipo_salida:salida.value.tipo_salida,
+            observaciones:salida.value.observacion,
+
+            productos:productosSalida.value.map(producto=>({
+                producto_id:producto.producto_id,
+                cantidad:producto.cantidad
+            }))
+        };
+
+
+        const response = await salidaService.guardar(datos);
+
+        alert(response.data.mensaje);
+
+
+        productosSalida.value=[];
+        productoSeleccionado.value=null;
+        cantidadSeleccionada.value=1;
+        salida.value.tipo_salida=null;
+        salida.value.observacion="";
+
+
+    }catch(error){
+
+        console.error(error);
+
+        alert("Error al registrar la salida");
+
+    }
+
 }
 
 </script>

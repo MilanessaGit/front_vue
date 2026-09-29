@@ -119,7 +119,7 @@
                             </span>
                             <div>
                                 <div>Cliente</div>
-                                <small class="section-subtitle">Busca por CI/NIT o registra uno nuevo</small>
+                                <small class="section-subtitle">Busca por CI/NIT, Nombre o Telefono, o registra uno nuevo</small>
                             </div>
                         </div>
                     </template>
@@ -127,13 +127,13 @@
                     <template #content>
                         <div class="grid align-items-end">
                             <div class="col-12 md:col-8">
-                                <label class="font-semibold mb-2 block">CI / NIT</label>
+                                <label class="font-semibold mb-2 block">CI / NIT | BUSCAR CLIENTE</label>
                                 <span class="p-input-icon-left w-full">
                                     <i class="pi pi-search" />
                                     <InputText
                                         v-model="buscar_clie"
                                         class="w-full"
-                                        placeholder="Ingrese CI/NIT y presione Enter"
+                                        placeholder="Ingrese CI/NIT, Nombre o Telefono y presione Enter"
                                         @keyup.enter="buscarClientes"
                                     />
                                 </span>
@@ -157,6 +157,47 @@
                                 </div>
                             </div>
                         </div>
+
+
+
+                        <div
+                            v-if="clientesEncontrados.length > 1 && !cliente?.id"
+                            class="mt-3">
+                            <div class="font-semibold mb-2">
+                                Clientes encontrados
+                            </div>
+
+                            <div
+                                v-for="item in clientesEncontrados"
+                                :key="item.id"
+                                class="cliente-seleccionado mb-2"
+                            >
+                                <div class="flex justify-content-between align-items-center gap-3">
+                                    <div>
+                                        <div class="font-semibold">
+                                            {{ item.nombre }} {{ item.apellido }}
+                                        </div>
+
+                                        <small class="text-600 block">
+                                            CI/NIT: {{ item.ci_nit || 'Sin dato' }}
+                                        </small>
+
+                                        <small v-if="item.telefono" class="text-600 block">
+                                            Tel.: {{ item.telefono }}
+                                        </small>
+                                    </div>
+
+                                    <Button
+                                        label="Seleccionar"
+                                        icon="pi pi-check"
+                                        size="small"
+                                        @click="seleccionarCliente(item)"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+
 
                         <div v-if="cliente?.id" class="cliente-seleccionado mt-3">
                             <div class="flex align-items-start justify-content-between gap-3 flex-wrap">
@@ -684,6 +725,8 @@ const productosVenta = ref([]);
 const buscar_clie = ref('');
 const cliente = ref({});
 const clienteBuscado = ref(false);
+const clientesEncontrados = ref([]);//new
+
 const clienteForm = ref({
     nombre: '',
     apellido: '',
@@ -944,7 +987,7 @@ const stockSeverity = (stock) => {
 // =====================================
 // Cliente
 // =====================================
-const buscarClientes = async () => {
+/*const buscarClientes = async () => {
     limpiarMensaje();
     clienteBuscado.value = false;
 
@@ -972,9 +1015,55 @@ const buscarClientes = async () => {
         clienteBuscado.value = true;
         mostrarError('No se pudo buscar al cliente.');
     }
-};
+};*/
+const buscarClientes = async () => {
+    limpiarMensaje();
 
-const abrirNuevoCliente = () => {
+    clienteBuscado.value = false;
+    clientesEncontrados.value = [];
+    cliente.value = {};
+
+    const termino = buscar_clie.value?.trim();
+
+    if (!termino) {
+        mostrarError('Ingrese CI/NIT, nombre o teléfono para buscar.');
+        return;
+    }
+
+    try {
+        const { data } = await clienteService.buscar(termino);
+
+        clientesEncontrados.value = Array.isArray(data) ? data : [];
+        clienteBuscado.value = true;
+
+        // Si solamente existe una coincidencia, seleccionarla automáticamente.
+        if (clientesEncontrados.value.length === 1) {
+            seleccionarCliente(clientesEncontrados.value[0]);
+        }
+
+    } catch (error) {
+        console.error('Error al buscar cliente:', error);
+
+        cliente.value = {};
+        clientesEncontrados.value = [];
+        clienteBuscado.value = true;
+
+        mostrarError('No se pudo buscar al cliente.');
+    }
+};//new
+const seleccionarCliente = (item) => {
+    cliente.value = item;
+    clientesEncontrados.value = [];
+
+    toast.add({
+        severity: 'success',
+        summary: 'Cliente seleccionado',
+        detail: `${item.nombre || ''} ${item.apellido || ''}`.trim(),
+        life: 2200
+    });
+}; //new
+
+/*const abrirNuevoCliente = () => {
     clienteForm.value = {
         nombre: '',
         apellido: '',
@@ -984,7 +1073,18 @@ const abrirNuevoCliente = () => {
     };
 
     visible.value = true;
-};
+};*/
+const abrirNuevoCliente = () => {
+    clienteForm.value = {
+        nombre: '',
+        apellido: '',
+        ci_nit: '',
+        telefono: '',
+        direccion: ''
+    };
+
+    visible.value = true;
+};// new
 
 const guardarCliente = async () => {
     if (!clienteForm.value.nombre?.trim() || !clienteForm.value.ci_nit?.trim()) {
