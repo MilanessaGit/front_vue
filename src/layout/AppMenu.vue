@@ -124,24 +124,93 @@ const menuVendedor = [
     {
         label: 'VENDEDOR',
         items: [
-            { label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/admin/dashboard' },
-            { label: 'Perfil', icon: 'pi pi-fw pi-user', to: '/admin/about' }
+            {
+                label: 'Perfil',
+                icon: 'pi pi-fw pi-user',
+                to: '/admin/about'
+            }
         ]
     },
+
     {
-        label: 'Gestión Productos',
+        label: 'PRODUCTOS E INVENTARIO',
         items: [
-            { label: 'Categorias', icon: 'pi pi-fw pi-id-card', to: '/admin/categoria' },
-            { label: 'Productos', icon: 'pi pi-fw pi-table', to: '/admin/producto' },
-            { label: 'Lotes', icon: 'pi pi-fw pi-tags', to: '/admin/lote' }
+            {
+                label: 'Categorías',
+                icon: 'pi pi-fw pi-id-card',
+                to: '/admin/categoria'
+            },
+            {
+                label: 'Productos',
+                icon: 'pi pi-fw pi-table',
+                to: '/admin/producto'
+            },
+            {
+                label: 'Lotes',
+                icon: 'pi pi-fw pi-tags',
+                to: '/admin/lote'
+            }
         ]
     },
+
     {
-        label: 'Ventas',
+        label: 'VENTAS',
         items: [
-            { label: 'Nueva Venta', icon: 'pi pi-fw pi-eye', to: '/admin/venta/nueva', badge: 'NUEVO' },
-            { label: 'Lista Ventas', icon: 'pi pi-fw pi-globe', to: '/admin/venta' },
-            { label: 'Clientes', icon: 'pi pi-fw pi-user', to: '/admin/cliente' }
+            {
+                label: 'Nueva Venta',
+                icon: 'pi pi-fw pi-shopping-cart',
+                to: '/admin/venta/nueva',
+                badge: 'NUEVO'
+            },
+            {
+                label: 'Lista Ventas',
+                icon: 'pi pi-fw pi-list',
+                to: '/admin/venta'
+            },
+            {
+                label: 'Clientes',
+                icon: 'pi pi-fw pi-user',
+                to: '/admin/cliente'
+            }
+        ]
+    },
+
+    {
+        label: 'ENTRADAS',
+        items: [
+            {
+                label: 'Nueva Entrada',
+                icon: 'pi pi-fw pi-plus-circle',
+                to: '/admin/entrada/nueva',
+                badge: 'NUEVO'
+            },
+            {
+                label: 'Lista Entradas',
+                icon: 'pi pi-fw pi-list',
+                to: '/admin/entrada'
+            },
+            {
+                label: 'Proveedores',
+                icon: 'pi pi-fw pi-truck',
+                to: '/admin/proveedor'
+            }
+        ]
+    },
+
+    {
+        label: 'SALIDAS',
+        items: [
+            {
+                label: 'Nueva Salida',
+                icon: 'pi pi-fw pi-minus-circle',
+                to: '/admin/salida/nueva',
+                badge: 'NUEVO'
+            },
+            {
+                label: 'Lista Salidas',
+                icon: 'pi pi-fw pi-list',
+                to: '/admin/salida'
+            }
         ]
     }
 ];

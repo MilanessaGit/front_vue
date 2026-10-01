@@ -209,13 +209,16 @@ const validarFormulario = () => {
 const redirigirSegunRol = async (role) => {
     const rol = String(role || '').trim().toLowerCase();
 
-    // El Dashboard únicamente corresponde al administrador.
-    if (rol === 'admin' || rol === 'administrador') {
+    if (rol === 'admin') {
         await router.push({ name: 'Dashboard' });
         return;
     }
 
-    // Supervisor y vendedor ingresan a una vista permitida para ambos.
+    if (rol === 'vendedor') {
+        await router.push({ name: 'NuevaVenta' });
+        return;
+    }
+
     await router.push({ name: 'about' });
 };
 

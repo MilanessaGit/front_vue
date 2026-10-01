@@ -224,9 +224,13 @@ const lazyParams = ref({});
 
 const role = localStorage.getItem("role")
 const esAdmin = role === 'admin';
-const puedeCrear = role === 'admin' || role === 'supervisor'
+/*const puedeCrear = role === 'admin' || role === 'supervisor'
 const puedeEditar = role === 'admin' 
-const puedeEliminar = role === 'admin'
+const puedeEliminar = role === 'admin'*/
+const puedeCrear = esAdmin;
+const puedeEditar = esAdmin;
+const puedeEliminar = esAdmin;
+
 
 const abrirDialogProducto = () => {
     product.value = {}

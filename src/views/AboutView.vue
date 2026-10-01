@@ -138,7 +138,14 @@ const salir = async () => {
 };
 
 const irInicio = () => {
-  router.push({ name: 'Dashboard' });
+    const rol = localStorage.getItem('role');
+
+    if (rol === 'vendedor') {
+        router.push({ name: 'NuevaVenta' });
+        return;
+    }
+
+    router.push({ name: 'Dashboard' });
 };
 
 const inicialesUsuario = computed(() => {

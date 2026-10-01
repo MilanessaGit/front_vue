@@ -39,87 +39,87 @@ const router = createRouter({
           // this generates a separate chunk (About.[hash].js) for this route
           // which is lazy-loaded when the route is visited.
           component: () => import('../views/AboutView.vue'),
-          meta: {requireAuth: true}
+          meta: {requireAuth: true, roles: ['admin', 'vendedor'] } //requiere authentication para acceder a la route
         },
         {
           path: 'usuario',
           name: 'Usuario',
           component: () => import('../views/admin/Usuario.vue'),
-          meta: {requireAuth: true} //requiere authentication para acceder a la route
+          meta: {requireAuth: true, roles: ['admin'] } //requiere authentication para acceder a la route
         },
         {
           path: 'categoria',
           name: 'Categoria',
           component: () => import(`../views/admin/Categoria.vue`),
-          meta: {requireAuth: true}
+          meta: {requireAuth: true , roles: ['admin', 'vendedor'] }
         },
         {
           path: 'producto',
           name: 'Producto',
           component: () => import('@/views/admin/producto/Producto.vue'),
-          meta: {requireAuth: true}
+          meta: {requireAuth: true, roles: ['admin', 'vendedor'] }
         },
         {
           path: 'lote',
           name: 'Lote',
           component: () => import('@/views/admin/lote/Lote.vue'),
-          meta: {requireAuth: true}
+          meta: {requireAuth: true, roles: ['admin', 'vendedor']}
         },
         {
           path: 'venta/nueva',
           name: 'NuevaVenta',
           component: () => import('@/views/admin/venta/NuevaVenta.vue'),
-          meta: {requireAuth: true}
+          meta: {requireAuth: true, roles: ['admin', 'vendedor']}
         },
         {
           path: 'venta',
           name: 'ListaVenta',
           component: () => import('@/views/admin/venta/ListaVenta.vue'),
-          meta: {requireAuth: true}
+          meta: {requireAuth: true, roles: ['admin', 'vendedor']}
         },
         {
           path: 'cliente',
           name: 'Cliente',
           component: () => import('@/views/admin/cliente/Cliente.vue'),
-          meta: {requireAuth: true}
+          meta: {requireAuth: true, roles: ['admin', 'vendedor']}
         },
         
         {
           path: 'proveedor',
           name: 'Proveedor',
           component: () => import('@/views/admin/proveedor/Proveedor.vue'),
-          meta: {requireAuth: true}
+          meta: {requireAuth: true, roles: ['admin', 'vendedor']}
         },
         {
           path: 'entrada/nueva',
           name: 'NuevaEntrada',
           component: () => import('@/views/admin/entrada/NuevaEntrada.vue'),
-          meta: {requireAuth: true}
+          meta: {requireAuth: true, roles: ['admin', 'vendedor']}
         },
         {
           path: 'entrada',
           name: 'Entrada',
           component: () => import('@/views/admin/entrada/ListaEntrada.vue'),
-          meta: {requireAuth: true}
+          meta: {requireAuth: true, roles: ['admin', 'vendedor']}
         },
 
         {
           path: 'empleado',
           name: 'Empleado',
           component: () => import('@/views/admin/empleado/Empleado.vue'),
-          meta: {requireAuth: true}
+          meta: {requireAuth: true, roles: ['admin'] }
         },
         {
           path: 'salida/nueva',
           name: 'NuevaSalida',
           component: () => import('@/views/admin/salida/NuevaSalida.vue'),
-          meta: {requireAuth: true}
+          meta: {requireAuth: true, roles: ['admin', 'vendedor']}
         },
         {
           path: 'salida',
           name: 'Salida',
           component: () => import('@/views/admin/salida/ListaSalida.vue'),
-          meta: {requireAuth: true}
+          meta: {requireAuth: true, roles: ['admin', 'vendedor']}
         },
 
         {
@@ -138,7 +138,7 @@ const router = createRouter({
           path: 'dashboard',
           name: 'Dashboard',
           component: () => import('@/views/Dash/Dashboard.vue'),
-          meta: {requireAuth: true}
+          meta: {requireAuth: true, roles: ['admin'] }
         },
         {
           path: 'recomendar',
@@ -150,7 +150,7 @@ const router = createRouter({
           path: 'prediccion',
           name: 'Prediccion',
           component: () => import('@/views/prediccionD/PrediccionDemanda.vue'),
-          meta: {requireAuth: true}
+          meta: {requireAuth: true, roles: ['admin'] }
         },
         {
           path: 'reportes/inventario-actual',
@@ -195,7 +195,12 @@ router.beforeEach((to, from, next) => {
     const rol = localStorage.getItem('role');
     const rolesPermitidos = to.meta.roles;
 
-    if (Array.isArray(rolesPermitidos) && !rolesPermitidos.includes(rol)) {
+    if (Array.isArray(rolesPermitidos) && !rolesPermitidos.includes(rol)) 
+    {
+      if (rol === 'vendedor') {
+          return next({ name: 'NuevaVenta' });
+      }
+
       return next({ name: 'Dashboard' });
     }
 

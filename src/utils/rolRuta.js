@@ -4,7 +4,7 @@ export const rutaRol = () => {
 
     const rutas = {
         admin: "/admin",
-        supervisor: "/supervisor",
+        //supervisor: "/supervisor",
         vendedor: "/vendedor"
     }
 

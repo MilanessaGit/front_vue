@@ -63,7 +63,7 @@
             </template>
         </Column>
 
-        <Column header="PAGOS">
+        <Column v-if="esAdmin" header="PAGOS">
             <template #body="slotProps">
                 <Button
                     label="Pagos"
@@ -307,6 +307,9 @@ const totalEntradas = ref(0);
 const visiblePago = ref(false);
 const entradaSeleccionada = ref(null);
 const pagos = ref([]);
+
+const role = localStorage.getItem('role');
+const esAdmin = role === 'admin';
  
  //const pagos
 const nuevoPago = ref({

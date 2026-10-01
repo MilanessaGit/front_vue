@@ -55,10 +55,10 @@
     <Column field="telefono" header="Telefono"></Column>
     <Column field="direccion" header="Direccion"></Column>
 
-    <Column field="acciones" header="Accion">
+    <Column v-if="esAdmin" field="acciones" header="Accion">
       <template #body="slotProps">        
 
-          <Button icon="pi pi-pencil" class="p-button-rounded p-button-warning" rounded  @click="editarCliente(slotProps.data)" />
+          <Button v-if="puedeEditar" icon="pi pi-pencil" class="p-button-rounded p-button-warning" rounded  @click="editarCliente(slotProps.data)" />
           <Button v-if="puedeEliminar" icon="pi pi-times" class="p-button-rounded p-button-danger" aria-label="Eliminar" @click="eliminarCliente(slotProps.data.id)" />
       </template>
     </Column>
