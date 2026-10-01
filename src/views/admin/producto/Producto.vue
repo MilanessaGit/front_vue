@@ -88,7 +88,7 @@
           :alt="slotProps.data.nombre || 'Imagen del producto'"
           class="w-6rem shadow-2 border-round"
         />
-        <Button icon="pi pi-camera" @click="seleccionarImagen(slotProps.data.id)" />
+        <Button v-if="esAdmin" icon="pi pi-camera" @click="seleccionarImagen(slotProps.data.id)" />
 
       </template>
     </Column>

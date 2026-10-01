@@ -114,6 +114,12 @@
                 </template>
             </Column>
 
+            <Column header="RESPONSABLE">
+                <template #body="slotProps">
+                    {{ nombreEmpleado(slotProps.data.empleado) }}
+                </template>
+            </Column>
+
             <Column header="TIPO">
                 <template #body="slotProps">
                     <Tag
@@ -187,13 +193,25 @@
         v-model:visible="visibleDetalle"
         modal
         :header="tituloDetalle"
-        :style="{ width: '75vw' }"
-        :breakpoints="{ '960px': '90vw', '640px': '95vw' }"
-    >
+        :style="{
+            width: '70rem',
+            maxWidth: '96vw'
+        }"
+        :breakpoints="{
+            '960px': '90vw',
+            '640px': '96vw'
+        }"
+        :contentStyle="{
+            maxHeight: '78vh',
+            overflowY: 'auto',
+            overflowX: 'hidden'
+        }" >
+
+
         <div v-if="ventaSeleccionada">
             <!-- DATOS GENERALES -->
             <div class="grid">
-                <div class="col-12 md:col-6 lg:col-3">
+                <div class="col-6 lg:col-3">
                     <div class="surface-100 border-round p-3 h-full">
                         <div class="text-600 text-sm mb-2">Cliente</div>
                         <div class="font-semibold">
@@ -202,7 +220,7 @@
                     </div>
                 </div>
 
-                <div class="col-12 md:col-6 lg:col-3">
+                <div class="col-6 lg:col-3">
                     <div class="surface-100 border-round p-3 h-full">
                         <div class="text-600 text-sm mb-2">Fecha</div>
                         <div class="font-semibold">
@@ -211,7 +229,7 @@
                     </div>
                 </div>
 
-                <div class="col-12 md:col-6 lg:col-3">
+                <div class="col-6 lg:col-3">
                     <div class="surface-100 border-round p-3 h-full">
                         <div class="text-600 text-sm mb-2">Entrega prevista</div>
                         <div class="font-semibold">
@@ -220,7 +238,7 @@
                     </div>
                 </div>
 
-                <div class="col-12 md:col-6 lg:col-3">
+                <div class="col-6 lg:col-3">
                     <div class="surface-100 border-round p-3 h-full">
                         <div class="text-600 text-sm mb-2">Tipo de venta</div>
                         <Tag
@@ -230,7 +248,7 @@
                     </div>
                 </div>
 
-                <div class="col-12 md:col-6 lg:col-3">
+                <div class="col-6 lg:col-3">
                     <div class="surface-100 border-round p-3 h-full">
                         <div class="text-600 text-sm mb-2">Estado de venta</div>
                         <Tag
@@ -239,6 +257,19 @@
                         />
                     </div>
                 </div>
+                
+                <div class="col-6 lg:col-3">
+                    <div class="surface-100 border-round p-3 h-full">
+                        <div class="text-600 text-sm mb-2">
+                            Responsable
+                        </div>
+
+                        <div class="font-semibold">
+                            {{ nombreEmpleado(ventaSeleccionada.empleado) }}
+                        </div>
+                    </div>
+                </div>
+                
             </div>
 
             <!-- RESUMEN ECONÓMICO -->
@@ -301,10 +332,12 @@
             <DataTable
                 :value="lotesDT"
                 responsiveLayout="scroll"
+                scrollable
+                scrollHeight="260px"
                 stripedRows
                 emptyMessage="No existen lotes asociados a esta venta"
-                tableStyle="min-width: 55rem"
-            >
+                tableStyle="min-width: 55rem"  >
+
                 <Column field="codigo_lote" header="LOTE">
                     <template #body="slotProps">
                         <span class="font-semibold">
@@ -331,7 +364,7 @@
                     </template>
                 </Column>
 
-                <Column header="STOCK RESTANTE">
+                <Column header="STOCK ACTUAL">
                     <template #body="slotProps">
                         {{ numero(slotProps.data.cantidad_actual) }}
                     </template>
@@ -380,7 +413,7 @@
         v-model:visible="visiblePagoFinal"
         modal
         header="Confirmar pago final"
-        :style="{ width: '32rem' }"
+        :style="{ width: '32rem', maxWidth: '95vw' }"
         :breakpoints="{ '640px': '95vw' }"
         :closable="!pagandoSaldo"
     >
@@ -433,7 +466,7 @@
         v-model:visible="visibleEntrega"
         modal
         header="Confirmar entrega"
-        :style="{ width: '32rem' }"
+        :style="{ width: '32rem', maxWidth: '95vw' }"
         :breakpoints="{ '640px': '95vw' }"
         :closable="!marcandoEntregada"
     >
@@ -883,5 +916,18 @@ function formatearFecha(fecha, incluirHora = true) {
         hour: '2-digit',
         minute: '2-digit'
     });
+}
+
+function nombreEmpleado(empleado) {
+    if (!empleado) {
+        return 'Sin responsable';
+    }
+
+    return [
+        empleado.nombre,
+        empleado.apellido
+    ]
+    .filter(Boolean)
+    .join(' ') || 'Sin responsable';
 }
 </script>

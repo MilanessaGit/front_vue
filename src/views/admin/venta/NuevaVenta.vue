@@ -247,7 +247,7 @@
 
                     <template #content>
                         <div class="grid align-items-end">
-                            <div class="col-12 md:col-7">
+                            <div class="col-12 md:col-6">
                                 <label class="font-semibold mb-2 block">Producto</label>
                                 <AutoComplete
                                     v-model="productoSeleccionado"
@@ -280,7 +280,7 @@
                                 </AutoComplete>
                             </div>
 
-                            <div class="col-12 md:col-3 lg:col-3">
+                            <div class="col-12 md:col-3">
                                 <label class="font-semibold mb-2 block">Cantidad</label>
                                 <div class="qty-control">
                                     <Button
@@ -305,7 +305,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-12 md:col-3 lg:col-3 venta-add-btn-col">
+                            <div class="col-12 md:col-3 venta-add-btn-col">
                                 <Button
                                     label="Agregar"
                                     icon="pi pi-plus"
@@ -354,6 +354,7 @@
                             :value="productosVenta"
                             dataKey="producto_id"
                             responsiveLayout="scroll"
+                            scrollable
                             stripedRows
                             rowHover
                             emptyMessage="Aún no agregaste productos a la venta"
@@ -1193,7 +1194,7 @@ const guardarVenta = async () => {
         cliente_id: cliente.value.id,
 
         // Se mantiene exactamente el comportamiento funcional probado.
-        empleado_id: mis_datos.value.user.id,
+        empleado_id: mis_datos.value.user.empleado.id,
 
         tipo_venta: tipo_venta.value,
 
