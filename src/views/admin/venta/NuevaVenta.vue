@@ -1161,8 +1161,8 @@ const validarFormulario = () => {
         return false;
     }
 
-    if (!mis_datos.value?.user?.id) {
-        mostrarError('No se pudo identificar al usuario actual.');
+    if (!mis_datos.value?.user?.empleado?.id) {
+        mostrarError('El usuario actual no tiene un empleado asociado.');
         return false;
     }
 

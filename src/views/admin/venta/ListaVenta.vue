@@ -24,12 +24,13 @@
         <div class="grid mb-2">
             <div class="col-12 md:col-5">
                 <span class="p-input-icon-left w-full">
-                    <i class="pi pi-search" />
+                    
                     <InputText
                         v-model="filtros.texto"
                         placeholder="Buscar por código o cliente"
                         class="w-full"
                     />
+                    <i class="pi pi-search" />
                 </span>
             </div>
 
