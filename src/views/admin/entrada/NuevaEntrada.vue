@@ -417,11 +417,11 @@ const guardarEntrada = async () => {
         return;
     }
 
-    if (!mis_datos.value?.user?.id) {
+    if (!mis_datos.value?.user?.empleado?.id) {
         toast.add({
             severity: 'error',
-            summary: 'Usuario no identificado',
-            detail: 'No fue posible identificar al usuario que registra la entrada.',
+            summary: 'Empleado no identificado',
+            detail: 'No fue posible identificar al empleado que registra la entrada.',
             life: 4000
         });
         return;
@@ -432,7 +432,7 @@ const guardarEntrada = async () => {
     try {
         const datos_ent = {
             proveedor_id: selectedProv.value,
-            empleado_id: mis_datos.value.user.id,
+            empleado_id: mis_datos.value.user.empleado.id,
             tipo_entrada: selectedType.value.nombre,
             productos: detalleEntrada.value
         };

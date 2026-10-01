@@ -1,4 +1,6 @@
 <template>
+    <Toast />
+
     <div class="card">
         <h2>Registro de Salida</h2>
         <div class="grid">
@@ -183,6 +185,7 @@ import productoService from "@/service/ProductoService";
 //import empleadoService from "@/service/EmpleadoService";
 import salidaService from "@/service/SalidaService";
 import { useRouter } from "vue-router";
+import { useToast } from "primevue/usetoast";
 
 const router = useRouter();
 
@@ -191,6 +194,8 @@ const router = useRouter();
 //==============================
 
 //const empleados = ref([]);
+
+const toast = useToast();
 
 const tiposSalida = ref([
     { label: "Robo", value: 2 },
@@ -318,7 +323,12 @@ const agregarProducto = () => {
     const cantidadTotal = cantidadActual + cantidad;
 
     if (cantidadTotal > stock) {
-        alert(`Stock insuficiente. Disponible: ${stock} unidades.`);
+        toast.add({
+            severity: 'warn',
+            summary: 'Stock insuficiente',
+            detail: `Disponible: ${stock} unidades.`,
+            life: 3000
+        });
         return;
     }
 
@@ -365,7 +375,84 @@ const eliminarProducto=(index)=>{
     await salidaService.guardar(datos);
 }
 */
-const guardar = async()=>{
+const guardar = async () => {
+
+    if (!salida.value.tipo_salida) {
+        toast.add({
+            severity: 'warn',
+            summary: 'Tipo requerido',
+            detail: 'Seleccione un tipo de salida.',
+            life: 3000
+        });
+        return;
+    }
+
+    if (productosSalida.value.length === 0) {
+        toast.add({
+            severity: 'warn',
+            summary: 'Sin productos',
+            detail: 'Debe agregar al menos un producto.',
+            life: 3000
+        });
+        return;
+    }
+
+    if (!mis_datos.value?.user?.empleado?.id) {
+        toast.add({
+            severity: 'error',
+            summary: 'Empleado no identificado',
+            detail: 'El usuario actual no tiene un empleado asociado.',
+            life: 4000
+        });
+        return;
+    }
+
+    try {
+
+        const datos = {
+            empleado_id: mis_datos.value.user.empleado.id,
+            tipo_salida: salida.value.tipo_salida,
+            observaciones: salida.value.observacion,
+
+            productos: productosSalida.value.map(producto => ({
+                producto_id: producto.producto_id,
+                cantidad: producto.cantidad
+            }))
+        };
+
+        const response = await salidaService.guardar(datos);
+
+        toast.add({
+            severity: 'success',
+            summary: 'Salida registrada',
+            detail: response.data.mensaje || 'La salida se registró correctamente.',
+            life: 4000
+        });
+
+        productosSalida.value = [];
+        productoSeleccionado.value = null;
+        cantidadSeleccionada.value = 1;
+        salida.value.tipo_salida = null;
+        salida.value.observacion = "";
+
+    } catch (error) {
+
+        console.error('Error al registrar salida:', error);
+
+        toast.add({
+            severity: 'error',
+            summary: 'No se pudo registrar',
+            detail:
+                error.response?.data?.error ||
+                error.response?.data?.mensaje ||
+                'Ocurrió un error al registrar la salida.',
+            life: 4500
+        });
+    }
+};
+
+
+/*const guardar = async()=>{
 
     if(productosSalida.value.length==0){
         alert("Debe agregar al menos un producto");
@@ -406,6 +493,6 @@ const guardar = async()=>{
 
     }
 
-}
+}*/
 
 </script>

@@ -40,7 +40,18 @@
         </Column>
         
         <Column field="proveedor.nombre" header="PROVEEDOR"></Column>
-        <Column field="empleado_id" header="EMPLEADO ID"></Column>
+        <Column header="RESPONSABLE">
+            <template #body="slotProps">
+                {{
+                    [
+                        slotProps.data.empleado?.nombre,
+                        slotProps.data.empleado?.apellido
+                    ]
+                    .filter(Boolean)
+                    .join(' ') || 'Sin responsable'
+                }}
+            </template>
+        </Column>
     
         <Column field="lotes" header="LOTES">
             <template #body="slotProps">
