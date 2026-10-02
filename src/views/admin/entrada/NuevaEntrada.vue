@@ -249,7 +249,16 @@ const mis_datos = ref(null);
 const detalleEntrada = ref([]);
 const selectedProv = ref(null);
 const proovs = ref([]);
-const fechaActual = ref(new Date().toISOString().slice(0, 10));
+const obtenerFechaLocal = () => {
+    const fecha = new Date();
+
+    const anio = fecha.getFullYear();
+    const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+    const dia = String(fecha.getDate()).padStart(2, '0');
+
+    return `${anio}-${mes}-${dia}`;
+};
+const fechaActual = ref(obtenerFechaLocal());
 const cant = ref(1);
 const precio = ref(0);
 const products = ref([]);
@@ -271,7 +280,7 @@ const totalEntrada = computed(() => {
 });
 
 onMounted(async () => {
-    fechaActual.value = new Date().toISOString().split('T')[0];
+    fechaActual.value = obtenerFechaLocal();
 
     await Promise.all([
         cargarProveedores(),
@@ -472,7 +481,7 @@ const limpiarFormulario = () => {
     cant.value = 1;
     precio.value = 0;
     detalleEntrada.value = [];
-    fechaActual.value = new Date().toISOString().split('T')[0];
+    fechaActual.value = obtenerFechaLocal();
 };
 
 const formatCurrency = (value) => {
